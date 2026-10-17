@@ -1,0 +1,7 @@
+dist
+# Hand-written prose and tables; Prettier would only re-pad them.
+*.md
+coverage
+package-lock.json
+docs/design/wireframes
+.claude

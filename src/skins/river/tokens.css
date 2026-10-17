@@ -1,0 +1,18 @@
+/* River: dark and calm (docs/design, River.dc.html). Recipient colours not yet validated. */
+[data-skin='river'] {
+  --bg: #0b1020;
+  --surface: #131a2e;
+  --text: #e8ecf7;
+  --text-muted: #8a93ad;
+  --text-faint: #6b7491;
+  --line: #3a4566;
+  --focus: #6fa8ff;
+  --you: #5bd69b;
+  --federal: #6fa8ff;
+  --social-security: #ffb15c;
+  --state: #c49bff;
+  --medicare: #ff7fa8;
+  --font-ui: 'Instrument Sans', system-ui, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-figures: 'JetBrains Mono', ui-monospace, monospace;
+}

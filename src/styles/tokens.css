@@ -1,0 +1,44 @@
+/*
+ * Token names, and the scale every skin shares. A skin sets the colour and type values in its
+ * own tokens.css under [data-skin="<id>"]; shared screens use only the names below.
+ */
+:root {
+  /* Set by the skin */
+  --bg: #000;
+  --surface: #111;
+  --text: #fff;
+  --text-muted: #aaa;
+  --text-faint: #777;
+  --line: #333;
+  --focus: #fff;
+  --you: #fff;
+  --federal: #fff;
+  --social-security: #fff;
+  --state: #fff;
+  --medicare: #fff;
+  --font-ui: system-ui, sans-serif;
+  --font-display: Georgia, serif;
+  --font-figures: ui-monospace, monospace;
+
+  /* Shared */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-pill: 999px;
+  --text-xs: 11px;
+  --text-s: 13px;
+  --text-m: 15px;
+  --text-l: 19px;
+  --text-hero: clamp(44px, 13vw, 72px);
+  --duration-ui: 200ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --tap: 44px;
+  --page-max: 560px;
+}

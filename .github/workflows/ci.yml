@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Typecheck, lint, format, tests with coverage thresholds, build.
+      - run: npm run check
+      # Every screen in every skin must fit a 390px phone.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run ux:up
+      - run: npm run ux:measure
