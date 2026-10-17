@@ -38,7 +38,7 @@ the call, record it in `docs/DECISIONS.md`, and raise product-level trade-offs.
 2. **Skins own their tokens and the hero stream; nothing else.** Adding or changing a skin must
    not touch `src/core/` or the shared screens (D4, D5).
 3. **Tax tables are dated and confirmed before they ship (D8).** Each carries `taxYear`,
-   `source` and `confirmed`; the build fails if none is confirmed, and the app uses the newest
+   `source` and `confirmed`; `npm run check` (run by every deploy) fails if none is confirmed; the app uses the newest
    confirmed one. Figures are transcribed from the fetched IRS/SSA documents with page
    citations — an assistant's recollection is **not a source**, because a stale bracket is a
    believable wrong number. The owner ticks off a figure-beside-page checklist. (Satsuma's

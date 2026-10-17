@@ -13,8 +13,8 @@ export default defineConfig({
   preview: { port: 8790, strictPort: true },
   test: {
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-    // Phase 0 has no tests yet; phase 1 brings the core and its coverage thresholds.
-    passWithNoTests: true,
+    // Calendar maths is local time; pin a zone with DST so results don't depend on the machine.
+    env: { TZ: 'America/Chicago' },
     coverage: {
       provider: 'v8',
       include: ['src/core/**', 'src/lib/format.ts'],

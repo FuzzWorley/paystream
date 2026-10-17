@@ -75,7 +75,8 @@ in front of users. Now:
   short checklist of figure-beside-page, and Claude flips `confirmed` in the same commit.
 - The app uses the newest confirmed table for the current year or earlier and labels its year.
   A new year's draft can sit in the repo unconfirmed; it's simply not used.
-- **The build fails if no table is confirmed.** Users always see calculated figures; there is
+- **`npm run check` fails if no table is confirmed, and every deploy runs it.** Users always
+  see calculated figures; there is
   no "no figure" state to design.
 
 ## D9 — Dark only in v1, both skins (2026-10-17)
@@ -117,3 +118,18 @@ Each gets a skill input, a score, and a short round. Numbers still come from the
 odds are honest, and skill is how you beat them. Paychinko keeps the real split as its bin
 widths, so a ball left to chance lands in proportion (watch mode shows exactly that) while a
 well-timed plunger and nudges beat the taxman. Details in `ENGINEERING_SPEC.md` §8.
+
+## D14 — Show rates per penny, minute, hour or day (2026-10-17)
+
+The owner wants users to choose "per minute", "per hour", "per day". The penny view ("1¢ every
+5.5 s") is the fun one; an amount per unit ("$6.60 an hour") is the one people compare with
+their lives. Both are the same rate, so this is a display unit:
+
+- Tap the hero figure to cycle penny → minute → hour → day; the same choice sits on the Numbers
+  screen; it applies to every lane and Arcade's RATE column, and is remembered. "Every penny"
+  is the first-visit default, and the next-penny countdown stays visible in every unit.
+- Users choose only the timeframe; the amount picks its money unit, as the penny view picks
+  its coin: under $1 in cents ("11¢ a minute"), else dollars and cents ("$6.60 an hour"),
+  whole dollars from $1,000. Choosing both would be two settings for one idea.
+- On the work clock, an hour is a working hour and a day is a workday (weekly hours ÷ 5).
+- Figures are the rate right now: a stopped Social Security stream reads $0, with the reason.

@@ -81,7 +81,8 @@ inside the fun has to be right, or the joke stops being funny.
    and the Social Security wage base change yearly; an assistant's memory of them is not a
    source. Transcribe from the fetched IRS/SSA documents with page citations; each table
    carries `taxYear`, `source` and `confirmed`; the owner ticks off a figure-beside-page
-   checklist; the build fails if no table is confirmed. Users always see figures, with the
+   checklist; `npm run check`, which every deploy runs, fails if none is confirmed. Users
+   always see figures, with the
    table's year in a footnote.
 3. **Exchange rates show their age.** A failed fetch keeps the last rate with its old
    timestamp; never show it as live, never show 0.

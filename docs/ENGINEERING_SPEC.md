@@ -64,6 +64,7 @@ interface; skins import from `core/`, `lib/`, `ui/`.
 | `overrides` | none | Per stream: a flat % of gross that replaces the calculation |
 | `clock` | `around` | `around` = every second of the year; `work` = hours × weeks (default 40 × 52) |
 | `things` | coffee $5, a month's rent $1,500 | Name + amount (D6) |
+| `rateUnit` | penny | penny, minute, hour or day (D14) |
 | `skin` | river | |
 | `sound` | off | |
 
@@ -113,6 +114,9 @@ piecewise constant, so the integral is exact and nothing accumulates per frame. 
 the smallest coin whose interval is ≥ 1 s, and then the time unit that keeps the figure between
 1 and 100. A stream at zero says why ("stopped for 2026: wage cap reached"), never "every ∞".
 The same function phrases your things ("A month's rent every 9.4 days").
+
+The other rate units (D14) are the same rate times a unit's seconds: 60, 3,600, and 86,400
+around the clock; on the work clock a day is `hoursPerWeek / 5` hours.
 
 ### Money in, money out
 
@@ -173,7 +177,8 @@ then `ux:measure`.
 - **One seeded property sweep** (`fast-check`, fixed seed, committed): at every instant,
   take-home plus taxes equals gross. Each stream integrated over the year equals its annual
   figure. Raising salary never lowers any tax. Every amount is finite and never negative.
-- **The table gate** (D8): the build fails if no shipped table is `confirmed: true`.
+- **The table gate** (D8): a test fails if no shipped table is `confirmed: true`, and
+  `npm run deploy` runs the whole check first.
 - **`ux:measure`**: every screen in every skin fits 390px, or CI fails.
 - **No-leak check** (§5).
 
@@ -213,12 +218,13 @@ confirmation checklist comes with this phase.
 
 ### Phase 2: the Stream screen in River
 Salary field (streams start as you type), clock toggle, River's hero, "next penny in…" per
-stream, *Since you got here*, settings persisted, reduced motion, the screen-reader table,
+stream, tap the hero to change the rate unit (D14), *Since you got here*, settings persisted, reduced motion, the screen-reader table,
 pause on hidden. Palette validated. This is the first time it's fun, so the owner plays with it
 on a phone.
 
 ### Phase 3: Your numbers and your things
-The Numbers screen (filing status, state %, overrides, clock hours × weeks, sound, skin) and
+The Numbers screen (filing status, state %, overrides, clock hours × weeks, rate unit, sound,
+skin) and
 the editable your-things list shown beside *Since you got here*. The wage-cap date. The year
 and source footnote.
 
