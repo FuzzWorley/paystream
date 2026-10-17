@@ -1,7 +1,15 @@
 // Everything a screen shows about the streams, derived from settings and the clock. Skins and
 // shared screens read these signals; none of them does tax maths.
 import { computed, effect, signal } from '@preact/signals';
-import { cadence, RATE_UNITS, unitSeconds, type Cadence, type RateUnit } from '../core/cadence';
+import {
+  cadence,
+  coinChoices,
+  nextCoinChoice,
+  RATE_UNITS,
+  unitSeconds,
+  type Cadence,
+  type RateUnit,
+} from '../core/cadence';
 import { calendarYear, earnedBetween, rateAt, socialSecurityStops } from '../core/stream';
 import { tableFor } from '../core/tables';
 import { annualBreakdown } from '../core/tax';
@@ -34,6 +42,9 @@ export interface StreamView {
   rateText: string;
   /** The same rate, compact for lanes and tables: "1¢ / 5.5 s", "$6.60 / hour". */
   rateShort: string;
+  /** The penny view in parts, so the coin can be its own control: "10¢" and "5.9 s". */
+  coinText: string;
+  everyText: string;
   /**
    * flowing; dry (nothing flows, on purpose: past the wage cap, no state tax); or unset
    * (waiting for the user's state rate).
@@ -128,7 +139,7 @@ export const views = computed<StreamView[]>(() =>
   STREAMS.map((stream) => {
     const rate = rates.value[stream];
     const got = earned.value[stream];
-    const c = cadence(rate);
+    const c = cadence(rate, settings.value.coin);
     const coins = c ? got / c.coin : 0;
     const progress = coins - Math.floor(coins);
     const still = c ? null : stillness(stream);
@@ -143,6 +154,8 @@ export const views = computed<StreamView[]>(() =>
       nextIn: c ? (1 - progress) * c.every : Infinity,
       rateText: text.long,
       rateShort: text.short,
+      coinText: c ? formatCoin(c.coin) : '',
+      everyText: c ? (formatDuration(c.every) ?? '') : '',
       kind: still?.kind ?? 'flowing',
       status: still?.status ?? '',
     };
@@ -163,4 +176,16 @@ export function nextRateUnit(unit: RateUnit): RateUnit {
 
 export function cycleRateUnit(): void {
   updateSettings({ rateUnit: nextRateUnit(settings.value.rateUnit) });
+}
+
+/** The coins worth offering at this salary: auto, then one coin for every stream. */
+const coins = computed(() =>
+  coinChoices(
+    rates.value.you,
+    STREAMS.flatMap((s) => cadence(rates.value[s])?.coin ?? []),
+  ),
+);
+
+export function cycleCoin(): void {
+  updateSettings({ coin: nextCoinChoice(settings.value.coin, coins.value) });
 }

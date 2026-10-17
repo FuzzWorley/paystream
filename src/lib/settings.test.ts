@@ -15,6 +15,7 @@ describe('parseSettings', () => {
       overrides: { federal: 0.18 },
       clock: { kind: 'work', hoursPerWeek: 37.5, weeksPerYear: 48 },
       rateUnit: 'hour',
+      coin: 0.1,
       things: [{ name: 'Groceries', amount: 120 }],
       skin: 'arcade',
       sound: true,
@@ -26,6 +27,7 @@ describe('parseSettings', () => {
       overrides: { federal: 0.18 },
       clock: { kind: 'work', hoursPerWeek: 37.5, weeksPerYear: 48 },
       rateUnit: 'hour',
+      coin: 0.1,
       things: [{ name: 'Groceries', amount: 120 }],
       skin: 'arcade',
       sound: true,
@@ -40,6 +42,7 @@ describe('parseSettings', () => {
       overrides: { federal: 2, medicare: 0.03, bogus: 1 },
       clock: { kind: 'work', hoursPerWeek: 0, weeksPerYear: 52 },
       rateUnit: 'fortnight',
+      coin: 0.25,
       things: [{ name: 'Ok', amount: 5 }, { name: 'No amount' }, 'junk'],
       sound: 'yes',
     });
@@ -49,6 +52,7 @@ describe('parseSettings', () => {
     expect(s.overrides).toEqual({ medicare: 0.03 });
     expect(s.clock).toEqual({ kind: 'around' });
     expect(s.rateUnit).toBe('penny');
+    expect(s.coin).toBe('auto');
     expect(s.things).toEqual([{ name: 'Ok', amount: 5 }]);
     expect(s.sound).toBe(false);
   });

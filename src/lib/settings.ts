@@ -1,7 +1,7 @@
 // What the user has typed, saved in this browser only (rule 1). Loading validates field by
 // field, so a corrupt or older save falls back to defaults instead of breaking the page.
 import { signal } from '@preact/signals';
-import { RATE_UNITS, type RateUnit } from '../core/cadence';
+import { COINS, RATE_UNITS, type CoinChoice, type RateUnit } from '../core/cadence';
 import {
   FILING_STATUSES,
   type Clock,
@@ -24,6 +24,7 @@ export interface Settings {
   overrides: Overrides;
   clock: Clock;
   rateUnit: RateUnit;
+  coin: CoinChoice;
   things: Thing[];
   skin: string;
   sound: boolean;
@@ -40,6 +41,7 @@ export const DEFAULTS: Settings = {
   overrides: {},
   clock: { kind: 'around' },
   rateUnit: 'penny',
+  coin: 'auto',
   things: [
     { name: 'A coffee', amount: 5 },
     { name: "A month's rent", amount: 1_500 },
@@ -92,6 +94,7 @@ export function parseSettings(raw: unknown): Settings {
     overrides: parseOverrides(raw.overrides),
     clock: parseClock(raw.clock) ?? DEFAULTS.clock,
     rateUnit: oneOf(raw.rateUnit, RATE_UNITS) ?? DEFAULTS.rateUnit,
+    coin: COINS.find((c) => c === raw.coin) ?? DEFAULTS.coin,
     things: parseThings(raw.things) ?? DEFAULTS.things,
     skin: typeof raw.skin === 'string' ? raw.skin : DEFAULTS.skin,
     sound: typeof raw.sound === 'boolean' ? raw.sound : DEFAULTS.sound,

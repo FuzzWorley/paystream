@@ -14,26 +14,47 @@
 }
 
 .rv-figure {
-  align-self: flex-start;
-  margin: 0 0 0 -4px;
-  padding: 0 4px;
-  border: 0;
-  border-radius: var(--radius-s);
-  background: none;
+  margin: 0;
   color: var(--text);
   font-family: var(--font-display);
   font-style: italic;
   font-size: clamp(44px, 14vw, 64px);
   line-height: 1;
   letter-spacing: -0.01em;
-  text-align: left;
   text-wrap: balance;
+}
+/* The coin and the time are each a control, set in the headline's own type. */
+.rv-figure-time,
+.rv-coin {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: transform 150ms var(--ease-out);
 }
-.rv-figure:active {
-  transform: scale(0.98);
+.rv-figure-time:active,
+.rv-coin:active {
+  transform: scale(0.97);
+}
+.rv-coin {
+  text-decoration: underline dotted;
+  text-decoration-color: var(--text-faint);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.12em;
+}
+.rv-coin-small {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  /* A bigger target than the glyphs, without moving them. */
+  margin: -10px -6px;
+  padding: 10px 6px;
 }
 
 .rv-sub {
@@ -72,9 +93,6 @@
   flex-direction: column;
   gap: var(--space-1);
   font-size: var(--text-s);
-}
-.rv-lane:first-of-type {
-  --w: 6px;
 }
 
 /* Trunk: through every lane, ending where the last lane branches off. */
@@ -162,19 +180,15 @@
   border-radius: 0 2px 2px 0;
   background: var(--rail);
 }
+/* Sized by its coin (--d), the same scale in every lane. */
 .rv-drop {
   position: absolute;
   top: 50%;
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
+  width: var(--d);
+  height: var(--d);
+  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
   border-radius: 50%;
   background: var(--c);
-}
-.rv-lane:first-of-type .rv-drop {
-  width: 11px;
-  height: 11px;
-  margin: -5.5px 0 0 -5.5px;
 }
 
 .rv-lane-earned {

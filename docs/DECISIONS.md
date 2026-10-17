@@ -149,3 +149,13 @@ Beneath it, shared notes say the rest:
 
 Lanes show rates compactly ("1¢ / 5.1 s", "$7.03 / hour"); the hero keeps the sentence
 ("1¢ every 5.1 s"), the line people read aloud and screenshot.
+
+## D16 — A dot's size is its coin; tap a coin to change it for the whole river (2026-10-17)
+
+The owner noticed that take-home's dots were always bigger, even when every lane counted in
+the same coin. Size now encodes value only: 1¢, 10¢, $1, $10 and $100 each have one dot size in
+every lane, and every rail has the same thickness. Tapping any coin (in the hero or a lane)
+cycles one choice for the whole river: auto (each stream picks a readable coin), then each coin
+at which take-home lands between every 0.2 s and every hour, skipping one that would look the
+same as auto. One shared coin, not one per lane, because then equal dots are equal money and
+faster dots are simply more of it. In the hero, the coin and the time are separate controls.

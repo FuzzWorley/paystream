@@ -28,6 +28,27 @@ export const SCREENS = [
       await field.press('Enter');
     },
   },
+  {
+    // Auto coins: take-home in 10¢ drops beside the taxes' 1¢ drops.
+    name: 'Stream-170k-work',
+    path: '/',
+    setup: async (page) => {
+      await page.getByLabel('Salary').fill('170000');
+      await page.getByRole('button', { name: 'At work' }).click();
+    },
+  },
+  {
+    // Tap the coin twice (auto → 1¢ → 10¢): every stream counted in 10¢.
+    name: 'Stream-170k-dimes',
+    path: '/',
+    setup: async (page) => {
+      await page.getByLabel('Salary').fill('170000');
+      await page.getByRole('button', { name: 'At work' }).click();
+      const coin = page.locator('.rv-figure .rv-coin');
+      await coin.click();
+      await coin.click();
+    },
+  },
   { name: 'Stream-reduced-motion', path: '/', context: { reducedMotion: 'reduce' } },
   {
     name: 'Stream-per-hour',
