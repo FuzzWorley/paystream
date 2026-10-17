@@ -37,6 +37,8 @@ export interface StreamView {
   rate: number;
   /** Since the page opened. */
   earned: number;
+  /** Whole coins arrived since the page opened: a lane's total ticks as each drop lands (D19). */
+  landed: number;
   cadence: Cadence | null;
   /** Share of the way to this stream's next coin, 0–1. */
   progress: number;
@@ -128,7 +130,9 @@ function timeTexts(rate: number): { long: string; short: string } {
 function view(stream: LaneId, label: string, rate: number, got: number): StreamView {
   const c = cadence(rate, coin.value);
   const coins = c ? got / c.coin : 0;
-  const progress = coins - Math.floor(coins);
+  // One count drives both the drops and the total, so the total ticks as a drop lands.
+  const whole = Math.floor(coins);
+  const progress = coins - whole;
   const still = c ? null : stillness(stream);
   const time = timeTexts(rate);
   return {
@@ -136,6 +140,7 @@ function view(stream: LaneId, label: string, rate: number, got: number): StreamV
     label,
     rate,
     earned: got,
+    landed: c ? whole * c.coin : 0,
     cadence: c,
     progress,
     nextIn: c ? (1 - progress) * c.every : Infinity,

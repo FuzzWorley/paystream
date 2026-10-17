@@ -177,3 +177,15 @@
   text-align: right;
   font-size: 12px;
 }
+/* Re-keyed per coin: the total settles in as a drop reaches it (D19). */
+@media (prefers-reduced-motion: no-preference) {
+  .rv-lane-earned {
+    animation: rv-tick 260ms var(--ease-out);
+  }
+}
+@keyframes rv-tick {
+  from {
+    transform: translateY(-3px);
+    opacity: 0.45;
+  }
+}

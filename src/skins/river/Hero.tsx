@@ -65,7 +65,10 @@ function Lane({ v }: { v: StreamView }) {
         <span class="rv-track" aria-hidden="true">
           {v.cadence && <Drops progress={v.progress} coin={v.cadence.coin} />}
         </span>
-        <span class="rv-lane-earned figures">{formatAmount(v.earned)}</span>
+        {/* Keyed by the total, so each landing coin replays the tick. */}
+        <span key={v.landed.toFixed(2)} class="rv-lane-earned figures">
+          {formatAmount(v.landed)}
+        </span>
       </div>
     </div>
   );

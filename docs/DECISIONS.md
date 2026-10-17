@@ -200,3 +200,16 @@ stays the first-visit default, because seeing where each penny goes is the point
   suddenly slows.
 - Shared component (`ui/TaxesToggle`), styled as a quieter, secondary switch than the clock,
   so Arcade can place it too.
+
+## D19 — A lane's total counts coins as they land (2026-10-17)
+
+The owner noticed that a lane's total went up with time, not when a drop reached it. Now the
+total is the whole coins arrived since the page opened. It comes from the same count that
+places the drops, so it ticks on the frame the lead drop reaches the end, and it settles in
+with a small motion (none with reduced motion). Still derived from elapsed time (rule 4).
+
+- *Since you got here* stays exact (four decimals). A lane holds only whole coins, so the
+  split lanes can add up to a little less than the combined lane or the exact total. The
+  difference is coins still on their way.
+- Stepping to a bigger unit can drop a lane's total, e.g. 43¢ in 1¢ coins is $0 in $1
+  coins: in that unit, none has landed yet.
