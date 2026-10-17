@@ -1,4 +1,7 @@
-/* River: dark and calm (docs/design, River.dc.html). Recipient colours not yet validated. */
+/*
+ * River: dark and calm (docs/design, River.dc.html). Recipient colours are the wireframe's
+ * hues at OKLCH L 0.66, passing the dataviz validator against --bg (dark band, CVD, contrast).
+ */
 [data-skin='river'] {
   --bg: #0b1020;
   --surface: #131a2e;
@@ -7,11 +10,11 @@
   --text-faint: #6b7491;
   --line: #3a4566;
   --focus: #6fa8ff;
-  --you: #5bd69b;
-  --federal: #6fa8ff;
-  --social-security: #ffb15c;
-  --state: #c49bff;
-  --medicare: #ff7fa8;
+  --you: #25ac73;
+  --federal: #5a92e7;
+  --social-security: #c97f21;
+  --state: #a37adb;
+  --medicare: #de628c;
   --font-ui: 'Instrument Sans', system-ui, sans-serif;
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-figures: 'JetBrains Mono', ui-monospace, monospace;

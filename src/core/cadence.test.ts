@@ -1,5 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { cadence, timeToEarn } from './cadence';
+import { cadence, timeToEarn, unitSeconds } from './cadence';
+
+describe('unitSeconds', () => {
+  it('is a plain minute, hour or day around the clock', () => {
+    const around = { kind: 'around' } as const;
+    expect([unitSeconds('minute', around), unitSeconds('hour', around), unitSeconds('day', around)]).toEqual([
+      60, 3600, 86_400,
+    ]);
+  });
+
+  it('makes a day a workday on the work clock', () => {
+    expect(unitSeconds('day', { kind: 'work', hoursPerWeek: 40, weeksPerYear: 52 })).toBe(8 * 3600);
+  });
+});
 
 describe('cadence', () => {
   it('counts pennies while a penny takes at least a second', () => {

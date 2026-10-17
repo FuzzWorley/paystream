@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { formatCoin, formatDuration, formatPercent, formatUsd } from './format';
+import {
+  formatAmount,
+  formatCoin,
+  formatCountdown,
+  formatDate,
+  formatDigits,
+  formatDuration,
+  formatPercent,
+  formatUsd,
+} from './format';
 
 describe('formatUsd', () => {
   it.each([
@@ -14,6 +23,27 @@ describe('formatUsd', () => {
 
   it('defaults to cents', () => {
     expect(formatUsd(7_670)).toBe('$7,670.00');
+  });
+});
+
+describe('formatAmount', () => {
+  it.each([
+    [0.1101, '11¢'],
+    [0.004, '0.4¢'],
+    [0, '0¢'],
+    [0.996, '$1.00'],
+    [6.603, '$6.60'],
+    [158.4726, '$158.47'],
+    [1_240.4, '$1,240'],
+  ])('%d is %s', (dollars, shown) => {
+    expect(formatAmount(dollars)).toBe(shown);
+  });
+});
+
+describe('formatDigits', () => {
+  it('groups thousands', () => {
+    expect(formatDigits(75_000)).toBe('75,000');
+    expect(formatDigits(0)).toBe('0');
   });
 });
 
@@ -36,6 +66,30 @@ describe('formatPercent', () => {
     [-0, '0%'],
   ])('%d is %s', (fraction, shown) => {
     expect(formatPercent(fraction)).toBe(shown);
+  });
+});
+
+describe('formatDate', () => {
+  it('is a short local date', () => {
+    expect(formatDate(new Date(2026, 7, 3, 15).getTime())).toBe('Aug 3');
+  });
+});
+
+describe('formatCountdown', () => {
+  it.each([
+    [2.34, '2.3 s'],
+    [59.9, '59.9 s'],
+    [59.97, '1m 00s'],
+    [252, '4m 12s'],
+    [2 * 3600 + 5 * 60, '2h 05m'],
+    [3 * 86_400 + 4 * 3600, '3d 4h'],
+  ])('%d s reads %s', (seconds, shown) => {
+    expect(formatCountdown(seconds)).toBe(shown);
+  });
+
+  it('is null when nothing is coming', () => {
+    expect(formatCountdown(Infinity)).toBeNull();
+    expect(formatCountdown(-1)).toBeNull();
   });
 });
 

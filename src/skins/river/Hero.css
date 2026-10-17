@@ -1,0 +1,184 @@
+.rv-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.rv-eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--you);
+}
+
+.rv-figure {
+  align-self: flex-start;
+  margin: 0 0 0 -4px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(44px, 14vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-wrap: balance;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 150ms var(--ease-out);
+}
+.rv-figure:active {
+  transform: scale(0.98);
+}
+
+.rv-sub {
+  margin: var(--space-1) 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.rv-hint {
+  color: var(--text-faint);
+}
+
+/*
+ * The river: a neutral trunk down the left, and each lane's channel curving off it to become
+ * that lane's rail. Hook and rail are one colour and thickness, anchored to the channel row,
+ * so they meet whatever the lane's height.
+ */
+.rv-lanes {
+  --trunk-x: 4px; /* centre of the trunk */
+  --gutter: 34px; /* lane content starts here */
+  --rise: 18px; /* how far above the rail a branch leaves the trunk */
+  --row: 20px;
+  --pad: 8px;
+}
+.rv-gross {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.rv-lane {
+  --w: 3px;
+  --rail: color-mix(in oklab, var(--c) 50%, var(--bg));
+  position: relative;
+  padding: var(--pad) 0 var(--pad) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-s);
+}
+.rv-lane:first-of-type {
+  --w: 6px;
+}
+
+/* Trunk: through every lane, ending where the last lane branches off. */
+.rv-lane::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--trunk-x) - 1px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+}
+.rv-lane:last-of-type::before {
+  bottom: auto;
+  height: calc(var(--pad) + var(--row) + var(--space-1) + var(--row) / 2 - var(--rise));
+}
+
+.rv-lane-top {
+  min-height: var(--row);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+}
+.rv-lane-label {
+  font-weight: 600;
+}
+.rv-lane-edit {
+  margin: -6px -6px;
+  padding: 6px;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rv-lane-edit .figures {
+  margin-left: var(--space-1);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.rv-lane-rate {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.rv-channel {
+  position: relative;
+  min-height: var(--row);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* From the trunk down and round into the channel's left edge, ending on its centre line. */
+.rv-hook {
+  position: absolute;
+  left: calc(var(--trunk-x) - var(--w) / 2 - var(--gutter));
+  right: 100%;
+  bottom: calc(50% - var(--w) / 2);
+  height: calc(var(--rise) + var(--w) / 2);
+  border: 0 solid var(--rail);
+  border-left-width: var(--w);
+  border-bottom-width: var(--w);
+  border-bottom-left-radius: 14px;
+}
+
+.rv-track {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+}
+.rv-track::before {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: var(--w);
+  transform: translateY(-50%);
+  border-radius: 0 2px 2px 0;
+  background: var(--rail);
+}
+.rv-drop {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--c);
+}
+.rv-lane:first-of-type .rv-drop {
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+}
+
+.rv-lane-earned {
+  min-width: 56px;
+  text-align: right;
+  font-size: 12px;
+}

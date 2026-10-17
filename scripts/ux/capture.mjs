@@ -10,19 +10,51 @@ import { chromium } from 'playwright';
 
 export const BASE = 'http://localhost:8790';
 
-export const SCREENS = [{ name: 'Stream', path: '/' }];
+// Each screen is reached with real controls (typing, tapping), never by setting state.
+export const SCREENS = [
+  { name: 'Stream', path: '/' },
+  {
+    // Past the wage base by mid-October: shows the stopped Social Security lane.
+    name: 'Stream-250k',
+    path: '/',
+    setup: (page) => page.getByLabel('Salary').fill('250000'),
+  },
+  {
+    name: 'Stream-state-set',
+    path: '/',
+    setup: async (page) => {
+      const field = page.getByLabel('Your state income tax rate, in percent');
+      await field.fill('5');
+      await field.press('Enter');
+    },
+  },
+  { name: 'Stream-reduced-motion', path: '/', context: { reducedMotion: 'reduce' } },
+  {
+    name: 'Stream-per-hour',
+    path: '/',
+    setup: async (page) => {
+      await page.getByRole('button', { name: /See it per minute/ }).click();
+      await page.getByRole('button', { name: /See it per hour/ }).click();
+    },
+  },
+];
 
 // Mirrors src/skins (D9: dark only in v1). Phase 4 adds Arcade and selects it by tapping
 // the skin switch, like a person would.
 export const SKINS = [{ id: 'river', schemes: ['dark'] }];
 
 // A fixed instant, so streams derived from the clock draw the same frame every run.
-export const FROZEN_AT = new Date('2026-03-02T10:00:00');
+export const FROZEN_AT = new Date('2026-10-17T10:00:00');
+// How long the visitor has been watching when the shot is taken.
+const WATCHED_MS = 4 * 60_000;
 
 export async function openScreen(page, screen) {
   await page.clock.install({ time: FROZEN_AT });
   await page.goto(`${BASE}${screen.path}`, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  await screen.setup?.(page);
+  await page.clock.fastForward(WATCHED_MS);
+  await page.clock.pauseAt(FROZEN_AT.getTime() + WATCHED_MS + 1000);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -49,7 +81,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         for (const screen of SCREENS) {
           if (only && screen.name !== only) continue;
           const tag = `${screen.name.toLowerCase()}-${skin.id}-${scheme}-${vp.key}`;
-          const context = await browser.newContext({ ...vp, colorScheme: scheme });
+          const context = await browser.newContext({ ...vp, colorScheme: scheme, ...screen.context });
           const page = await context.newPage();
           page.on('console', (m) => {
             if (m.type() === 'error') problems.push(`${tag}: ${m.text().slice(0, 300)}`);

@@ -1,0 +1,137 @@
+/* The shared shell around a skin's hero. Tokens only: it must look deliberate in every skin. */
+.screen {
+  min-height: 100dvh;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-5) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wordmark {
+  font-weight: 600;
+  font-size: var(--text-l);
+  letter-spacing: -0.01em;
+}
+.wordmark span {
+  color: var(--you);
+}
+
+.toggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+.toggle-option {
+  min-height: 38px;
+  min-width: 56px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font: 600 var(--text-s) var(--font-ui);
+  cursor: pointer;
+  transition:
+    background var(--duration-ui) var(--ease-out),
+    color var(--duration-ui) var(--ease-out);
+}
+.toggle-option[aria-pressed='true'] {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.screen-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.salary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-4);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+}
+.salary:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.salary-label {
+  font-size: var(--text-s);
+  color: var(--text-muted);
+}
+.salary-dollar {
+  font-size: 20px;
+  color: var(--text-muted);
+}
+.salary-input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 20px;
+  outline: none;
+}
+.salary-input::placeholder {
+  color: var(--text-faint);
+}
+.salary-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.salary-note svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+.salary-example {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+}
+
+.screen-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.since {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-s);
+  color: var(--text-muted);
+}
+.since-you {
+  color: var(--you);
+}
+
+.footnote {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}

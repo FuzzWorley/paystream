@@ -128,8 +128,9 @@ Taxes are worked out in USD (rule 5). A display currency (v1.5) is a conversion 
 - `lib/clock.ts` holds the single `requestAnimationFrame` loop and exposes `now` as a signal.
   It stops on `visibilitychange` → hidden and restarts on visible. Because amounts are derived,
   a tab shown again after an hour is simply correct, with no burst of coins.
-- Per-frame text (counters, countdowns) binds to computed signals and patches the text node
-  directly. Nothing re-renders the tree 60 times a second.
+- Per-frame values come from computed signals in `lib/model.ts`. Only the components that
+  show moving numbers (the skin's hero, *Since you got here*) re-render each frame; the shell,
+  salary field and settings don't. Phase 5 measures it on a mid-range phone profile.
 - **The hero belongs to the skin.** River: lanes of dots positioned by transform from derived
   values (DOM/SVG, five lanes is small). Arcade: the high-score table with block meters. Each
   skin's hero takes the same props: the per-stream values and rates as signals.
@@ -148,8 +149,9 @@ Press Start 2P. `schemes` is `['dark']` for both skins in v1 (D9). The token nam
 `styles/tokens.css`; shared screens use only those names.
 
 Colour per recipient (you, federal, state, Social Security, Medicare) is fixed per skin and
-checked as a set with the dataviz palette validator against that skin's background. The
-wireframe colours are a starting point, not checked yet.
+checked as a set with the dataviz palette validator against that skin's background. River's
+are the wireframe hues brought to OKLCH lightness 0.66, the validator's dark band. Lane labels
+use text colours; the coloured marks beside them carry identity.
 
 The skin switch is in the header on the Stream screen and on the Numbers screen. A returning
 visitor gets their last skin; a first visit gets River.

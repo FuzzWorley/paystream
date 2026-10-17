@@ -1,0 +1,62 @@
+/* Shared by every skin; tokens only. */
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.notes:empty {
+  display: none;
+}
+
+.note {
+  margin: 0;
+  font-size: var(--text-s);
+  color: var(--text-muted);
+}
+.note-title {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+.note-body {
+  margin: 2px 0 0;
+  text-wrap: pretty;
+}
+
+/* A question waiting for an answer: dashed, like a channel not yet dug. */
+.note-ask {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-m);
+}
+.note-ask .state-field {
+  margin-top: var(--space-2);
+}
+
+.note-capped {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--social-security);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+  background: var(--surface);
+}
+
+.note-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.note-link {
+  min-height: var(--tap);
+  padding: 0 var(--space-1);
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--line);
+  cursor: pointer;
+}

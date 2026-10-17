@@ -133,3 +133,19 @@ their lives. Both are the same rate, so this is a display unit:
   whole dollars from $1,000. Choosing both would be two settings for one idea.
 - On the work clock, an hour is a working hour and a day is a workday (weekly hours ÷ 5).
 - Figures are the rate right now: a stopped Social Security stream reads $0, with the reason.
+
+## D15 — The river draws only what flows; the rest is a note beneath it (2026-10-17)
+
+The owner disliked lanes that sit still: an unset State lane, a capped Social Security lane.
+A still lane reads as broken, so a river (in any skin) draws only streams with money moving.
+Beneath it, shared notes say the rest:
+
+- **State, unanswered:** a dashed prompt, "Add your state's income tax", with a `%` field and
+  "None in my state". A rate makes State join the river in its usual place; its "State · 5%"
+  label reopens the prompt. "None" leaves no lane, just "No state income tax · change".
+  "Not answered" (`null`) and "none" (`0`) are stored apart so each is shown honestly.
+- **Social Security past the wage cap:** "paid up for 2026", the date, the maximum paid, and
+  that take-home sped up — the river losing a branch is the moment itself.
+
+Lanes show rates compactly ("1¢ / 5.1 s", "$7.03 / hour"); the hero keeps the sentence
+("1¢ every 5.1 s"), the line people read aloud and screenshot.
