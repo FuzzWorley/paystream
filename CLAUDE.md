@@ -20,11 +20,16 @@ is never required, and signed out nothing the user types is sent anywhere.**
 
 ## State
 
-Designed and specified, not built. The direction is chosen (`docs/design/README.md`, D4–D7):
-**River skin (default) and Arcade skin**, dark only in v1 (D9), shared "Your numbers" and
-salary-vs-gains screens, editable "your things", optional accounts later, real playable games
-in v3 (D13). Stack: Vite + Preact + TypeScript, static assets only (D10). No app code yet.
-Next: phase 0 of `docs/ENGINEERING_SPEC.md` (scaffold, CI, first deploy).
+Phases 0–2 of `docs/ENGINEERING_SPEC.md` are built and live: scaffold and CI, the tax core
+(2026 table confirmed, D8), and the River Stream screen — the river draws only flowing streams
+(D15), dots sized by coin (D16), independent unit and time steppers (D17), taxes split or
+combined (D18), and the State prompt and Social Security paid-up note beneath the river.
+Direction: **River (default) and Arcade skins**, dark only in v1 (D9); Vite + Preact +
+TypeScript, static assets only (D10).
+Next: phase 3 — the Numbers screen and "your things". Then phase 4, Arcade.
+
+To see UI changes: `npm run dev -- --host` serves on the LAN for the owner's phone;
+`npm run ux:up` + `ux:shots` / `ux:measure` for screenshots and the 390px check.
 
 The owner is the product overseer and trusts Claude's design and engineering judgement: make
 the call, record it in `docs/DECISIONS.md`, and raise product-level trade-offs.

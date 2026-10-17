@@ -52,6 +52,13 @@
   --row: 20px;
   --pad: 8px;
 }
+.rv-lanes-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-1);
+}
 .rv-gross {
   margin: 0;
   font-size: var(--text-xs);

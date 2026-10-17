@@ -14,7 +14,7 @@ import {
 import { calendarYear, earnedBetween, earningSeconds, rateAt, socialSecurityStops } from '../core/stream';
 import { tableFor } from '../core/tables';
 import { annualBreakdown } from '../core/tax';
-import { STREAMS, type Clock, type Stream } from '../core/types';
+import { STREAMS, type Clock, type PerStream, type Stream } from '../core/types';
 import { now } from './clock';
 import { formatAmount, formatCoin, formatDate, formatDuration } from './format';
 import { settings, taxInputs, updateSettings } from './settings';
@@ -27,8 +27,11 @@ export const STREAM_LABELS: Record<Stream, string> = {
   medicare: 'Medicare',
 };
 
+/** A river lane: one stream, or every tax as one when combined (D18). */
+export type LaneId = Stream | 'taxes';
+
 export interface StreamView {
-  stream: Stream;
+  stream: LaneId;
   label: string;
   /** Per second, right now. */
   rate: number;
@@ -96,7 +99,7 @@ export const ssCappedOn = computed(() => {
 });
 
 /** Why a stream has nothing flowing, short and long. */
-function stillness(stream: Stream): { kind: 'dry' | 'unset'; status: string; why: string } {
+function stillness(stream: LaneId): { kind: 'dry' | 'unset'; status: string; why: string } {
   const stop = ssStopsAt.value;
   if (stream === 'socialSecurity' && stop !== null && now.value >= stop) {
     return {
@@ -122,34 +125,45 @@ function timeTexts(rate: number): { long: string; short: string } {
   return { long: `${amount} every ${word}`, short: `${amount} / ${word}` };
 }
 
+function view(stream: LaneId, label: string, rate: number, got: number): StreamView {
+  const c = cadence(rate, coin.value);
+  const coins = c ? got / c.coin : 0;
+  const progress = coins - Math.floor(coins);
+  const still = c ? null : stillness(stream);
+  const time = timeTexts(rate);
+  return {
+    stream,
+    label,
+    rate,
+    earned: got,
+    cadence: c,
+    progress,
+    nextIn: c ? (1 - progress) * c.every : Infinity,
+    unitText: c ? `${formatCoin(c.coin)} every ${formatDuration(c.every) ?? ''}` : (still?.why ?? ''),
+    timeText: c ? time.long : (still?.why ?? ''),
+    timeShort: c ? time.short : (still?.status ?? ''),
+    kind: still?.kind ?? 'flowing',
+    status: still?.status ?? '',
+  };
+}
+
 export const views = computed<StreamView[]>(() =>
-  STREAMS.map((stream) => {
-    const rate = rates.value[stream];
-    const got = earned.value[stream];
-    const c = cadence(rate, coin.value);
-    const coins = c ? got / c.coin : 0;
-    const progress = coins - Math.floor(coins);
-    const still = c ? null : stillness(stream);
-    const time = timeTexts(rate);
-    return {
-      stream,
-      label: STREAM_LABELS[stream],
-      rate,
-      earned: got,
-      cadence: c,
-      progress,
-      nextIn: c ? (1 - progress) * c.every : Infinity,
-      unitText: c ? `${formatCoin(c.coin)} every ${formatDuration(c.every) ?? ''}` : (still?.why ?? ''),
-      timeText: c ? time.long : (still?.why ?? ''),
-      timeShort: c ? time.short : (still?.status ?? ''),
-      kind: still?.kind ?? 'flowing',
-      status: still?.status ?? '',
-    };
-  }),
+  STREAMS.map((stream) => view(stream, STREAM_LABELS[stream], rates.value[stream], earned.value[stream])),
 );
 
-/** The streams with money moving: the only ones a river draws. */
-export const flowing = computed(() => views.value.filter((v) => v.kind === 'flowing'));
+const TAX_STREAMS = STREAMS.filter((s) => s !== 'you');
+const allTaxes = (per: PerStream) => TAX_STREAMS.reduce((sum, s) => sum + per[s], 0);
+
+/**
+ * What a river draws: only streams with money moving (D15), and the taxes as one lane when
+ * combined (D18). The combined lane counts in the same coin, so its drops compare with yours.
+ */
+export const lanes = computed<StreamView[]>(() => {
+  const moving = views.value.filter((v) => v.kind === 'flowing');
+  if (!settings.value.combineTaxes) return moving;
+  const taxes = view('taxes', 'Taxes', allTaxes(rates.value), allTaxes(earned.value));
+  return [...moving.filter((v) => v.stream === 'you'), ...(taxes.kind === 'flowing' ? [taxes] : [])];
+});
 
 export const isExample = computed(() => settings.value.salary === null);
 

@@ -1,10 +1,11 @@
 import type { Coin } from '../../core/cadence';
 import { formatAmount, formatCoin, formatCountdown, formatDigits, formatPercent } from '../../lib/format';
-import { flowing, views, type StreamView } from '../../lib/model';
+import { lanes, views, type StreamView } from '../../lib/model';
 import { reducedMotion } from '../../lib/motion';
 import { EXAMPLE_SALARY, settings } from '../../lib/settings';
 import { RateSteppers } from '../../ui/RateSteppers';
 import { editingState } from '../../ui/StreamNotes';
+import { TaxesToggle } from '../../ui/TaxesToggle';
 import './Hero.css';
 
 const DROPS = 5;
@@ -72,7 +73,7 @@ function Lane({ v }: { v: StreamView }) {
 
 export function Hero() {
   const you = views.value[0];
-  const lanes = flowing.value;
+  const drawn = lanes.value;
   if (!you) return null;
   const salary = settings.value.salary ?? EXAMPLE_SALARY;
   const countdown = formatCountdown(you.nextIn);
@@ -90,10 +91,13 @@ export function Hero() {
         <RateSteppers />
       </section>
 
-      {lanes.length > 0 && (
+      {drawn.length > 0 && (
         <section class="rv-lanes" aria-label="Where each penny goes">
-          <p class="rv-gross figures">${formatDigits(salary)} a year in ↓</p>
-          {lanes.map((v) => (
+          <div class="rv-lanes-head">
+            <p class="rv-gross figures">${formatDigits(salary)} a year in ↓</p>
+            <TaxesToggle />
+          </div>
+          {drawn.map((v) => (
             <Lane key={v.stream} v={v} />
           ))}
         </section>

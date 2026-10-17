@@ -54,6 +54,17 @@ export const SCREENS = [
     path: '/',
     setup: (page) => page.getByRole('button', { name: 'Longer time' }).click(),
   },
+  {
+    // All taxes as one lane, with the state rate said beneath the river.
+    name: 'Stream-combined',
+    path: '/',
+    setup: async (page) => {
+      const field = page.getByLabel('Your state income tax rate, in percent');
+      await field.fill('5');
+      await field.press('Enter');
+      await page.getByRole('button', { name: 'Combined' }).click();
+    },
+  },
 ];
 
 // Mirrors src/skins (D9: dark only in v1). Phase 4 adds Arcade and selects it by tapping

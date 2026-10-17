@@ -1,5 +1,5 @@
 import { signal } from '@preact/signals';
-import { formatDate, formatUsd } from '../lib/format';
+import { formatDate, formatPercent, formatUsd } from '../lib/format';
 import { annual, ssCappedOn, table } from '../lib/model';
 import { settings } from '../lib/settings';
 import { StateRateField } from './StateRateField';
@@ -40,9 +40,17 @@ export function StreamNotes() {
           />
         </div>
       ) : (
-        rate === 0 && (
+        // With the taxes combined there's no State lane to tap, so its rate is said here.
+        (rate === 0 || settings.value.combineTaxes) && (
           <p class="note note-line">
-            No state income tax ·{' '}
+            {rate === 0 ? (
+              'No state income tax'
+            ) : (
+              <>
+                State income tax <span class="figures">{formatPercent(rate)}</span>
+              </>
+            )}{' '}
+            ·{' '}
             <button
               type="button"
               class="note-link"

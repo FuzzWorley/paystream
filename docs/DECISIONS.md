@@ -183,3 +183,20 @@ always means one thing**:
 - *Since you got here* is today's settings over the whole visit, so flipping 24 h / At work
   (or changing the salary) shows that version of the same minutes, beside the time on the
   page. It replaced banking each stretch at the old setting.
+
+## D18 — The taxes can flow as one stream (2026-10-17)
+
+The owner wanted to see all the taxes as a single rail, or each on its own as before. A
+**Split | Combined** switch heads the river; combined, it draws two lanes, You and Taxes. Split
+stays the first-visit default, because seeing where each penny goes is the point of the brief.
+
+- The Taxes lane is the sum of every tax stream (its rate, its total, its drops), counted in
+  the same shared coin (D16), so its dots compare directly with yours.
+- Its colour is a neutral (`--taxes`), because it is a sum rather than any one recipient. The
+  dataviz validator flags it as grey, which is the intent. Beside You it passes CVD
+  (ΔE 8.9), and the lanes are labelled.
+- Combined, there is no State lane to tap, so the notes beneath the river say "State income
+  tax 5% · change". Social Security's paid-up note still explains a combined lane that
+  suddenly slows.
+- Shared component (`ui/TaxesToggle`), styled as a quieter, secondary switch than the clock,
+  so Arcade can place it too.

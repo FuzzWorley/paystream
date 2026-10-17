@@ -49,6 +49,17 @@
   background: var(--text);
   color: var(--bg);
 }
+/* A secondary view switch, sitting inside the content rather than the header. */
+.toggle-small .toggle-option {
+  min-height: 30px;
+  min-width: 0;
+  padding: 0 var(--space-3);
+  font-size: 12px;
+}
+.toggle-small .toggle-option[aria-pressed='true'] {
+  background: var(--line);
+  color: var(--text);
+}
 
 .screen-main {
   display: flex;

@@ -27,6 +27,8 @@ export interface Settings {
   coin: CoinChoice;
   /** The time frame amounts are shown over: "$7.03 every hour" (D17). */
   timeUnit: TimeUnit;
+  /** Draw the taxes as one stream instead of one per tax (D18). */
+  combineTaxes: boolean;
   things: Thing[];
   skin: string;
   sound: boolean;
@@ -44,6 +46,7 @@ export const DEFAULTS: Settings = {
   clock: { kind: 'around' },
   coin: 'auto',
   timeUnit: 'hour',
+  combineTaxes: false,
   things: [
     { name: 'A coffee', amount: 5 },
     { name: "A month's rent", amount: 1_500 },
@@ -97,6 +100,7 @@ export function parseSettings(raw: unknown): Settings {
     clock: parseClock(raw.clock) ?? DEFAULTS.clock,
     coin: COINS.find((c) => c === raw.coin) ?? DEFAULTS.coin,
     timeUnit: oneOf(raw.timeUnit, TIME_UNITS) ?? DEFAULTS.timeUnit,
+    combineTaxes: typeof raw.combineTaxes === 'boolean' ? raw.combineTaxes : DEFAULTS.combineTaxes,
     things: parseThings(raw.things) ?? DEFAULTS.things,
     skin: typeof raw.skin === 'string' ? raw.skin : DEFAULTS.skin,
     sound: typeof raw.sound === 'boolean' ? raw.sound : DEFAULTS.sound,

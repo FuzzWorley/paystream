@@ -15,6 +15,8 @@
   --social-security: #c97f21;
   --state: #a37adb;
   --medicare: #de628c;
+  /* Every tax as one lane (D18): a neutral, because it's a sum, not any one recipient. */
+  --taxes: #9aa2b8;
   --font-ui: 'Instrument Sans', system-ui, sans-serif;
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-figures: 'JetBrains Mono', ui-monospace, monospace;

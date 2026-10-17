@@ -16,6 +16,7 @@ describe('parseSettings', () => {
       clock: { kind: 'work', hoursPerWeek: 37.5, weeksPerYear: 48 },
       coin: 0.1,
       timeUnit: 'week',
+      combineTaxes: true,
       things: [{ name: 'Groceries', amount: 120 }],
       skin: 'arcade',
       sound: true,
@@ -28,6 +29,7 @@ describe('parseSettings', () => {
       clock: { kind: 'work', hoursPerWeek: 37.5, weeksPerYear: 48 },
       coin: 0.1,
       timeUnit: 'week',
+      combineTaxes: true,
       things: [{ name: 'Groceries', amount: 120 }],
       skin: 'arcade',
       sound: true,
@@ -43,6 +45,7 @@ describe('parseSettings', () => {
       clock: { kind: 'work', hoursPerWeek: 0, weeksPerYear: 52 },
       coin: 0.25,
       timeUnit: 'fortnight',
+      combineTaxes: 'yes',
       things: [{ name: 'Ok', amount: 5 }, { name: 'No amount' }, 'junk'],
       sound: 'yes',
     });
@@ -53,6 +56,7 @@ describe('parseSettings', () => {
     expect(s.clock).toEqual({ kind: 'around' });
     expect(s.coin).toBe('auto');
     expect(s.timeUnit).toBe('hour');
+    expect(s.combineTaxes).toBe(false);
     expect(s.things).toEqual([{ name: 'Ok', amount: 5 }]);
     expect(s.sound).toBe(false);
   });
