@@ -29,9 +29,10 @@ optional account syncs across devices for people who want it.
 | Hosting | Cloudflare Workers static assets, free; `paystream.bitcopia.workers.dev` |
 | Repo | Public on GitHub |
 | Accounts | Optional, never required: username + password to sync settings and scores across devices (D7). Signed out, everything stays in the browser |
-| Look | Switchable skins: **River** (default) and **Arcade**, both in v1 (D4). Mint's look dropped |
+| Look | Switchable skins: **River** (default) and **Arcade**, both in v1 (D4), dark only (D9). Mint's look dropped |
+| Defaults | Around-the-clock clock first; no 401(k)/HSA in v1; take-home is the hero figure (D12) |
 | Taxes, v1 | Federal income tax, Social Security and Medicare **calculated** for a chosen filing status; **state typed in** as a percentage; every rate overridable |
-| Tax data | Dated tables with source, confirmed by the owner before any figure shows |
+| Tax data | Dated tables transcribed from the IRS/SSA documents, checked by the owner before they ship (D8) |
 | Currency | Taxes always in USD; currency is the unit you watch the stream in |
 
 ## Scope by version (to be firmed up in the engineering spec)
@@ -63,9 +64,10 @@ optional account syncs across devices for people who want it.
 - Optional username + password; syncs settings and scores; delete-my-account; privacy page (D7).
 
 **v3 — arcade games**
-- Mini-games built on the same numbers. Ideas: a **pachinko board** whose coins land in your jar
-  and the tax jars in the real proportions; **coin catcher** (beat the taxman's bucket);
-  **snake** eating your per-second coins.
+- Mini-games built on the same numbers, and **actually playable and fun** (D13). Ideas:
+  **Paychinko**, a pachinko board whose bins are sized by your real tax split (launch and nudge
+  to beat the taxman); **coin catcher** (beat the taxman's bucket); **snake** eating your
+  per-second coins.
 
 **Small delights (anywhere they fit)**
 - A shareable card (opt-in, salary optionally rounded or hidden — percentages only).
@@ -79,7 +81,5 @@ optional account syncs across devices for people who want it.
 
 ## Open questions
 
-- Which clock is the default on first visit?
-- Pre-tax deductions (401(k), HSA) in v1, or later?
 - Which states, if any, get calculated rather than typed (later)?
 - Global game leaderboards (would need nicknames; v3+).

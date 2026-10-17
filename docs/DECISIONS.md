@@ -63,3 +63,57 @@ would lose people's settings.
   Email Sending is beta and needs Workers Paid for arbitrary recipients (docs checked
   2026-10-17); a third-party sender would work if email is ever wanted.
 - Placed after the core v1 and before the games, so scores have a home from the start.
+
+## D8 — Tax tables are confirmed at build time, not at runtime (2026-10-17)
+
+*Amends D3.* The owner pointed out that users should only ever type their state rate. They're
+right: the D3 runtime rule ("an unconfirmed table produces no figure") put a developer check
+in front of users. Now:
+
+- Claude transcribes each year's figures from the published IRS revenue procedure and SSA fact
+  sheet, fetched and cited with page numbers, never from recollection. The owner ticks off a
+  short checklist of figure-beside-page, and Claude flips `confirmed` in the same commit.
+- The app uses the newest confirmed table for the current year or earlier and labels its year.
+  A new year's draft can sit in the repo unconfirmed; it's simply not used.
+- **The build fails if no table is confirmed.** Users always see calculated figures; there is
+  no "no figure" state to design.
+
+## D9 — Dark only in v1, both skins (2026-10-17)
+
+The owner doesn't need light mode for Arcade (a light CRT makes no sense) and isn't sure River
+needs it. Each theme has to be designed and reviewed, not inverted, so a second theme doubles
+the visual work for little gain now. Skins declare `schemes: ['dark']`; the screenshot and
+review workflow captures what a skin declares. A light River later is a token set, contained
+in `src/skins/river/`.
+
+## D10 — Stack: Vite + Preact + signals + TypeScript, static assets only (2026-10-17)
+
+Satsuma's toolchain (Vite, strict TS, Vitest, ESLint, Prettier, Playwright) carries over. UI is
+Preact rather than React: the same API at a tenth of the size, and `@preact/signals` updates
+per-frame numbers without re-rendering. No Worker script until v1.5 or accounts need one.
+Fonts are self-hosted, so loading the page makes no third-party request.
+
+## D11 — Social Security and Additional Medicare follow the real calendar (2026-10-17)
+
+The brief wants the Social Security stream to visibly stop at the wage cap. That needs a
+position in the year: wages to date are `salary × yearFraction(now)`, so Social Security runs
+at 6.2% until they reach the wage base and then stops until 1 Jan (and take-home speeds up).
+Additional Medicare starts at its threshold the same way. Federal and state flow evenly.
+Averaging over the year was simpler, but the stop would never be seen.
+
+## D12 — Defaults for v1 (2026-10-17)
+
+- First visit uses the around-the-clock clock.
+- No pre-tax deductions (401(k), HSA) in v1; overrides cover them for now.
+- Married filing jointly assumes one earner's wages (the wage base is per person).
+- The typed state rate is a percentage of gross wages.
+- The hero figure is take-home ("To you"), not gross. The brief's "a penny every 4.2 s" at
+  $75k is the gross rate; the wireframes' 5.4 s is take-home.
+
+## D13 — The games are real games (2026-10-17)
+
+The owner wants most of the arcade games to be actually playable and fun, not animations.
+Each gets a skill input, a score, and a short round. Numbers still come from the core: a game's
+odds are honest, and skill is how you beat them. Paychinko keeps the real split as its bin
+widths, so a ball left to chance lands in proportion (watch mode shows exactly that) while a
+well-timed plunger and nudges beat the taxman. Details in `ENGINEERING_SPEC.md` §8.

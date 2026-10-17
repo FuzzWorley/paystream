@@ -14,16 +14,20 @@ is never required, and signed out nothing the user types is sent anywhere.**
 |---|---|
 | `docs/PRODUCT_BRIEF.md` | What we're building, in the owner's words, with scope by version |
 | `docs/design/` | Wireframes and the chosen visual direction (once picked) |
-| `docs/ENGINEERING_SPEC.md` | The phased build plan (written after the design is chosen) |
+| `docs/ENGINEERING_SPEC.md` | The model, the stack and the phased build plan |
 | `docs/DECISIONS.md` | Every deliberate change to the spec, with the reason |
 | `.claude/skills/` | How to build it (`paystream-frontend`) and how to check it (`playwright-ui-review`) |
 
 ## State
 
-Designed, not built. The direction is chosen (`docs/design/README.md`, D4–D7): **River skin
-(default) and Arcade skin**, shared "Your numbers" and salary-vs-gains screens, editable "your
-things", optional username + password accounts in a later phase. No app code yet. Next: write
-`docs/ENGINEERING_SPEC.md` as a phased plan, then phase 0 (scaffold, CI, first deploy).
+Designed and specified, not built. The direction is chosen (`docs/design/README.md`, D4–D7):
+**River skin (default) and Arcade skin**, dark only in v1 (D9), shared "Your numbers" and
+salary-vs-gains screens, editable "your things", optional accounts later, real playable games
+in v3 (D13). Stack: Vite + Preact + TypeScript, static assets only (D10). No app code yet.
+Next: phase 0 of `docs/ENGINEERING_SPEC.md` (scaffold, CI, first deploy).
+
+The owner is the product overseer and trusts Claude's design and engineering judgement: make
+the call, record it in `docs/DECISIONS.md`, and raise product-level trade-offs.
 
 ## The rules that bite
 
@@ -33,12 +37,12 @@ things", optional username + password accounts in a later phase. No app code yet
    account and nowhere else — never into logs.
 2. **Skins own their tokens and the hero stream; nothing else.** Adding or changing a skin must
    not touch `src/core/` or the shared screens (D4, D5).
-3. **Tax tables are dated and must be confirmed.** Each carries `taxYear`, `source` and
-   `confirmed`; an unconfirmed table produces no figure. An assistant's recollection of
-   brackets, the standard deduction or the Social Security wage base is **not a source** — a
-   stale one is a believable wrong number. The repo owner confirms against the IRS/SSA release.
-   (Satsuma has a 2026 draft table in `src/services/tax/brackets.ts`, still unconfirmed, source
-   `irs.gov/pub/irs-drop/rp-25-32.pdf` — a starting point to check, not a source.)
+3. **Tax tables are dated and confirmed before they ship (D8).** Each carries `taxYear`,
+   `source` and `confirmed`; the build fails if none is confirmed, and the app uses the newest
+   confirmed one. Figures are transcribed from the fetched IRS/SSA documents with page
+   citations — an assistant's recollection is **not a source**, because a stale bracket is a
+   believable wrong number. The owner ticks off a figure-beside-page checklist. (Satsuma's
+   unconfirmed 2026 draft in `src/services/tax/brackets.ts` is a cross-check, not a source.)
 4. **Derive every displayed amount from elapsed time**, never by accumulating per-frame
    increments. Pause on `visibilitychange`.
 5. **Taxes are US and in dollars.** A currency (sats, BTC, gold, EUR…) is a display unit

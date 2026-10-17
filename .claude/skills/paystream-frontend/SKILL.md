@@ -44,8 +44,9 @@ inside the fun has to be right, or the joke stops being funny.
   one it was built in. Screenshot every screen in every skin.
 - Give it a real point of view: a display face with character for the big numbers, a clean
   face for labels, tabular figures everywhere digits change (so they don't jitter).
-- Every colour, size, radius and duration is a token in `src/styles/tokens.css`. Light and dark
-  are each designed, not inverted.
+- Every colour, size, radius and duration is a token: names in `src/styles/tokens.css`,
+  values in each skin's `tokens.css`. Dark only in v1 (D9); a skin declares its `schemes`, and
+  any theme added later is designed, not inverted.
 - Each recipient (you, federal, state, Social Security, Medicare) owns one colour, fixed by
   identity, checked as a set for colour-blind separation in both themes, and always labelled.
   The dataviz skill's palette validator settles it; don't eyeball it.
@@ -64,8 +65,10 @@ inside the fun has to be right, or the joke stops being funny.
   (time is passed in). That keeps it trivially testable and lets games reuse it.
 - **Games** are self-contained modules behind one interface (`mount(canvas, inputs) → unmount`),
   lazy-loaded so the main page stays light, with keyboard and touch controls and pause on blur.
-  Physics can be playful, but **any number a game claims comes from the core** — a pachinko
-  board that says it shows your tax split lands coins in the real proportions.
+  They are **real games** (D13): a skill input, a score worth beating, a short round. Physics
+  can be playful, but **any number a game claims comes from the core**, and its odds are
+  honest: Paychinko's bins are sized by the real split, so a ball left to chance lands in
+  proportion and skill is how you beat the taxman.
 - Small dependency budget. Every library has to earn its bytes.
 
 ## The few things that must stay true
@@ -74,11 +77,12 @@ inside the fun has to be right, or the joke stops being funny.
    event, or a URL the server sees. A share link is opt-in and keeps its data in the
    `#fragment`, which browsers never send. Say so beside the field: "Stays in your browser."
    Signed in, say instead that it's saved to the account so it follows you.
-2. **Tax tables are dated and confirmed.** Brackets, standard deduction and the Social Security
-   wage base change yearly; an assistant's memory of them is not a source. Each table carries
-   its `taxYear`, `source` URL and `confirmed` flag, ships `confirmed: false`, and an
-   unconfirmed table produces no figure — the UI says why and offers typed-in rates instead.
-   The repo owner flips it after checking the source. Show the year in a footnote.
+2. **Tax tables are dated and confirmed before they ship (D8).** Brackets, standard deduction
+   and the Social Security wage base change yearly; an assistant's memory of them is not a
+   source. Transcribe from the fetched IRS/SSA documents with page citations; each table
+   carries `taxYear`, `source` and `confirmed`; the owner ticks off a figure-beside-page
+   checklist; the build fails if no table is confirmed. Users always see figures, with the
+   table's year in a footnote.
 3. **Exchange rates show their age.** A failed fetch keeps the last rate with its old
    timestamp; never show it as live, never show 0.
 4. **One formatter module** (`src/lib/format.ts`) for every amount and unit — dollars, sats,
@@ -96,7 +100,7 @@ inside the fun has to be right, or the joke stops being funny.
 ## Before calling a screen done
 
 - [ ] Fun in the first second? One hero, everything else quiet?
-- [ ] Light and dark, desktop and 390px, all looked at?
+- [ ] Every skin, every scheme it declares, desktop and 390px, all looked at?
 - [ ] Reduced-motion version designed, with every number intact?
 - [ ] Tab hidden for an hour, then shown: right total, no burst?
 - [ ] Keyboard and touch both work; a text/table equivalent exists for anything animated?

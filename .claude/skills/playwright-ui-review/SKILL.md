@@ -1,6 +1,6 @@
 ---
 name: playwright-ui-review
-description: How UI is checked and reviewed in this repo — Playwright screenshots at desktop and 390px in light and dark, a layout-width measurement that fails CI, and design reviews published as an artifact. Use after any UI change and whenever asked to review the design.
+description: How UI is checked and reviewed in this repo — Playwright screenshots at desktop and 390px in every skin and the colour schemes it declares (dark only in v1), a layout-width measurement that fails CI, and design reviews published as an artifact. Use after any UI change and whenever asked to review the design.
 ---
 
 # Playwright UI review
@@ -13,8 +13,8 @@ design problem. This is the workflow that worked on Satsuma; carry it over intac
 | Command | What it does |
 |---|---|
 | `npm run ux:up` | Builds and serves the app on a fixed port (e.g. :8790) for screenshots. |
-| `npm run ux:shots` | Every screen at **1440px and 390px**, **light and dark**, as JPEGs in `$TMPDIR/paystream-ux/shots`, plus `problems.txt` with console errors. `-- Name` captures one screen. |
-| `npm run ux:measure` | Lays out every screen on a 390px phone and **exits non-zero if any is wider**, naming the elements whose right edge sticks out. Runs in CI. |
+| `npm run ux:shots` | Every screen at **1440px and 390px**, in **every skin and each scheme it declares** (dark only in v1, D9), as JPEGs in `$TMPDIR/paystream-ux/shots`, plus `problems.txt` with console errors. `-- Name` captures one screen. |
+| `npm run ux:measure` | Lays out every screen in every skin on a 390px phone and **exits non-zero if any is wider**, naming the elements whose right edge sticks out. Runs in CI. |
 | `npm run ux:down` | Stops the server on that port, and only that port. |
 
 `reference/capture.mjs` and `reference/measure.mjs` are Satsuma's versions. Adapt `BASE`, the
@@ -46,8 +46,8 @@ identity ever exists. Keep `playwright` as a **pinned** dev dependency; browsers
 
 ## A design review
 
-When asked to review the design: screenshots of every screen, desktop and phone, light and
-dark, judged as a senior UI/UX designer; findings ranked by impact against effort, each with a
+When asked to review the design: screenshots of every screen, desktop and phone, every skin
+and declared scheme, judged as a senior UI/UX designer; findings ranked by impact against effort, each with a
 crop beside it; proposals mocked in HTML using the product's own tokens; **published as an
 artifact**. Keep the review out of the repo; the decisions it produces go in `docs/DECISIONS.md`.
 
