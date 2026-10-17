@@ -82,8 +82,12 @@ const UNITS = [
   { size: 3600, label: 'h', upTo: 48 },
 ] as const;
 
-/** One decimal under ten, whole numbers above: "4.2", "36". */
+/**
+ * Two significant figures or more, so a few percent of change stays visible: "0.59", "4.2",
+ * "36".
+ */
 function figure(n: number): string {
+  if (Number(n.toFixed(2)) < 1) return n.toFixed(2);
   return Number(n.toFixed(1)) < 10 ? n.toFixed(1) : String(Math.round(n));
 }
 

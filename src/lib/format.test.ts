@@ -95,6 +95,16 @@ describe('formatCountdown', () => {
 
 describe('formatDuration', () => {
   it.each([
+    // Under a second, two decimals: adding 5.75% state tax at $170k at work moves take-home
+    // from 0.59 s to 0.64 s a penny, which one decimal showed as "0.6 s" both times.
+    [127_461 / 7_488_000, '0.59 s', 0.01],
+    [117_686 / 7_488_000, '0.64 s', 0.01],
+    [1 / 0.9995, '1.0 s', 1],
+  ])('a coin at %d a second arrives every %s', (rate, shown, coin) => {
+    expect(formatDuration(coin / rate)).toBe(shown);
+  });
+
+  it.each([
     [4.2, '4.2 s'],
     [9.96, '10 s'],
     [42, '42 s'],
