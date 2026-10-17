@@ -65,24 +65,51 @@ export const SCREENS = [
       await page.getByRole('button', { name: 'Combined' }).click();
     },
   },
+  { name: 'Numbers', path: '/numbers' },
+  {
+    // A typed federal rate, a state rate, the work clock and a third thing.
+    name: 'Numbers-edited',
+    path: '/numbers',
+    setup: async (page) => {
+      await page.getByLabel('Salary').fill('250000');
+      await page.getByLabel('Federal income tax rate, in percent').fill('22');
+      await page.getByLabel('Your state income tax rate, in percent').fill('5.75');
+      await page.getByLabel('While I work').check();
+      await page.getByRole('button', { name: '+ Add a thing' }).click();
+      await page.getByLabel('Thing', { exact: true }).last().fill('A week of groceries');
+      await page.getByLabel('Price of A week of groceries, in dollars').fill('180');
+    },
+  },
+  { name: 'Privacy', path: '/privacy' },
 ];
 
-// Mirrors src/skins (D9: dark only in v1). Phase 4 adds Arcade and selects it by tapping
-// the skin switch, like a person would.
-export const SKINS = [{ id: 'river', schemes: ['dark'] }];
+// Mirrors src/skins (D9: dark only in v1). A skin is chosen by tapping the switch on Your
+// numbers, like a person would.
+export const SKINS = [
+  { id: 'river', name: 'River', schemes: ['dark'] },
+  { id: 'arcade', name: 'Arcade', schemes: ['dark'] },
+];
 
 // A fixed instant, so streams derived from the clock draw the same frame every run.
 export const FROZEN_AT = new Date('2026-10-17T10:00:00');
 // How long the visitor has been watching when the shot is taken.
 const WATCHED_MS = 4 * 60_000;
 
-export async function openScreen(page, screen) {
-  await page.clock.install({ time: FROZEN_AT });
+export async function openScreen(page, screen, skin = SKINS[0]) {
+  // Time runs freely while the skin is chosen, then stops at FROZEN_AT, so every screen opens
+  // at the same instant however long choosing took.
+  await page.clock.install({ time: FROZEN_AT.getTime() - 120_000 });
+  if (skin !== SKINS[0]) {
+    await page.goto(`${BASE}/numbers`, { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: skin.name, exact: true }).click();
+    await page.waitForFunction((id) => document.documentElement.dataset.skin === id, skin.id);
+  }
+  await page.clock.pauseAt(FROZEN_AT);
   await page.goto(`${BASE}${screen.path}`, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await screen.setup?.(page);
   await page.clock.fastForward(WATCHED_MS);
-  await page.clock.pauseAt(FROZEN_AT.getTime() + WATCHED_MS + 1000);
+  await page.clock.runFor(1000);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -115,7 +142,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
             if (m.type() === 'error') problems.push(`${tag}: ${m.text().slice(0, 300)}`);
           });
           page.on('pageerror', (e) => problems.push(`${tag}: ${e.message}`));
-          await openScreen(page, screen);
+          await openScreen(page, screen, skin);
           const shot = { type: 'jpeg', quality: 80, animations: 'disabled' };
           await page.screenshot({ ...shot, path: `${OUT}${tag}.jpg`, fullPage: true });
           if (vp.key === 'mobile') await page.screenshot({ ...shot, path: `${OUT}${tag}-fold.jpg` });

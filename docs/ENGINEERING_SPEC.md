@@ -63,6 +63,8 @@ interface; skins import from `core/`, `lib/`, `ui/`.
 | `stateRate` | 0%, with a nudge to type yours | Percent of gross wages (D12) |
 | `overrides` | none | Per stream: a flat % of gross that replaces the calculation |
 | `clock` | `around` | `around` = every second of the year; `work` = hours × weeks (default 40 × 52) |
+| `workWeek` | 40 × 52 | the work clock's hours, kept while the 24-hour clock is on (D23) |
+| `combineTaxes` | false | draw the taxes as one stream (D18) |
 | `things` | coffee $5, a month's rent $1,500 | Name + amount (D6) |
 | `coin` | auto | the unit: 1¢ … $100, or take-home's readable coin (D17) |
 | `timeUnit` | hour | the time frame: second … year (D17) |
@@ -145,9 +147,9 @@ Taxes are worked out in USD (rule 5). A display currency (v1.5) is a conversion 
 
 ## 4. Skins
 
-A skin is `{ id, name, schemes, Hero, load() }` plus a `tokens.css` scoped to
-`[data-skin="<id>"]`. `load()` brings in its fonts and CSS lazily, so River users never download
-Press Start 2P. `schemes` is `['dark']` for both skins in v1 (D9). The token names live in
+A skin is `{ id, name, schemes, load() }` plus a `tokens.css` scoped to
+`[data-skin="<id>"]`. `load()` brings its Hero, coin voice, fonts and CSS lazily, so River users
+never download Press Start 2P; the screen switches skin once the module has loaded (D21). `schemes` is `['dark']` for both skins in v1 (D9). The token names live in
 `styles/tokens.css`; shared screens use only those names.
 
 Colour per recipient (you, federal, state, Social Security, Medicare) is fixed per skin and
@@ -155,7 +157,8 @@ checked as a set with the dataviz palette validator against that skin's backgrou
 are the wireframe hues brought to OKLCH lightness 0.66, the validator's dark band. Lane labels
 use text colours; the coloured marks beside them carry identity.
 
-The skin switch is in the header on the Stream screen and on the Numbers screen. A returning
+The skin switch is in the header on the Stream screen, with the clock toggle under the salary
+(D22), and on the Numbers screen. A returning
 visitor gets their last skin; a first visit gets River.
 
 ## 5. Privacy, by construction
@@ -171,8 +174,8 @@ visitor gets their last skin; a first visit gets River.
 
 ## 6. Quality gates
 
-`npm run check` = typecheck, lint, format check, `vitest run --coverage`, build. CI runs `check`
-then `ux:measure`.
+`npm run check` = typecheck, lint, format check, `vitest run --coverage`, build. CI runs `check`,
+then `ux:measure` and `ux:noleak` against the built app. `ux:perf` is run by hand (D25).
 
 - **Coverage**: `src/core/**` and `src/lib/format.ts` at 100% lines and branches. They're small,
   and they're the part that can be wrong about money.

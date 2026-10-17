@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks';
-import { formatPercent } from '../lib/format';
 import { settings, updateSettings } from '../lib/settings';
+import { percentText, readPercent } from './percentInput';
 import './StateRateField.css';
 
 /** Top marginal state rates are in the low teens; anything above this is a typo. */
@@ -24,13 +24,8 @@ export function StateRateField({ autoFocus = false, onDone }: Props) {
   }, [autoFocus]);
 
   const onInput = (e: Event) => {
-    const el = e.currentTarget as HTMLInputElement;
-    const cleaned = el.value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');
-    if (cleaned !== el.value) el.value = cleaned;
-    const percent = Number.parseFloat(cleaned);
-    updateSettings({
-      stateRate: Number.isFinite(percent) ? Math.min(percent, MAX_PERCENT) / 100 : null,
-    });
+    const percent = readPercent(e.currentTarget as HTMLInputElement, MAX_PERCENT);
+    updateSettings({ stateRate: percent === null ? null : percent / 100 });
   };
 
   return (
@@ -46,7 +41,7 @@ export function StateRateField({ autoFocus = false, onDone }: Props) {
           inputMode="decimal"
           autoComplete="off"
           placeholder="add"
-          defaultValue={rate ? formatPercent(rate).replace('%', '') : ''}
+          defaultValue={rate ? percentText(rate) : ''}
           onInput={onInput}
           onBlur={onDone}
           onKeyDown={(e) => {

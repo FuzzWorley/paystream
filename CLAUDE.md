@@ -20,16 +20,17 @@ is never required, and signed out nothing the user types is sent anywhere.**
 
 ## State
 
-Phases 0–2 of `docs/ENGINEERING_SPEC.md` are built and live: scaffold and CI, the tax core
-(2026 table confirmed, D8), and the River Stream screen — the river draws only flowing streams
-(D15), dots sized by coin (D16), independent unit and time steppers (D17), taxes split or
-combined (D18), lane totals that tick as each coin lands (D19), and the State prompt and Social
-Security paid-up note beneath the river. Direction: **River (default) and Arcade skins**, dark
-only in v1 (D9); Vite + Preact + TypeScript, static assets only (D10).
-Next: phase 3 — the Numbers screen and "your things". Then phase 4, Arcade.
+Phases 0–5 of `docs/ENGINEERING_SPEC.md` (v1) are built: scaffold and CI, the tax core
+(2026 table confirmed, D8), the Stream screen (D15–D19), Your numbers, your things and the
+privacy page (D23), the Arcade skin (D20) loaded on demand (D21) with the skin switch in the
+header (D22), coin sounds (D24), and install, no-leak and performance checks (D25). Direction:
+**River (default) and Arcade skins**, dark only in v1 (D9); Vite + Preact + TypeScript,
+static assets only (D10). Next: v1.5, currencies.
 
 To see UI changes: `npm run dev -- --host` serves on the LAN for the owner's phone;
-`npm run ux:up` + `ux:shots` / `ux:measure` for screenshots and the 390px check.
+`npm run ux:up` + `ux:shots` / `ux:measure` / `ux:noleak` / `ux:perf` against the built app
+(rebuild with `npm run build` while it's up; `ux:shots -- <Name>` captures one screen in every
+skin).
 
 The owner is the product overseer and trusts Claude's design and engineering judgement: make
 the call, record it in `docs/DECISIONS.md`, and raise product-level trade-offs.

@@ -1,14 +1,26 @@
+import { effect } from '@preact/signals';
 import { render } from 'preact';
 import './styles/tokens.css';
 import './styles/base.css';
+import './styles/shell.css';
+import { App } from './App';
 import { startClock } from './lib/clock';
-import { settings } from './lib/settings';
-import { defaultSkin, skins } from './skins';
-import { Stream } from './screens/Stream';
+import { startCoinSounds } from './lib/sound';
+import { activeSkin, followSkinChoice } from './skins';
 
-const skin = skins.find((k) => k.id === settings.peek().skin) ?? defaultSkin;
-document.documentElement.dataset.skin = skin.id;
+// Tokens are scoped to [data-skin], so switching skins restyles every screen at once.
+effect(() => {
+  const root = document.documentElement;
+  root.dataset.skin = activeSkin.value.skin.id;
+  // The phone's status bar matches the skin's background.
+  const bg = getComputedStyle(root).getPropertyValue('--bg').trim();
+  if (bg) document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg);
+});
 
 startClock();
-const root = document.getElementById('app');
-if (root) render(<Stream />, root);
+startCoinSounds(() => activeSkin.value.module.voice);
+
+const app = document.getElementById('app');
+void followSkinChoice().then(() => {
+  if (app) render(<App />, app);
+});

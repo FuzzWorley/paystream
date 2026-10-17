@@ -1,4 +1,4 @@
-/* The shared shell around a skin's hero. Tokens only: it must look deliberate in every skin. */
+/* The shell every screen shares. Tokens only: it must look deliberate in every skin. */
 .screen {
   min-height: 100dvh;
   max-width: var(--page-max);
@@ -15,9 +15,37 @@
   align-items: center;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.icon-button {
+  flex: none;
+  width: var(--tap);
+  height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+.icon-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
 .wordmark {
-  font-weight: 600;
-  font-size: var(--text-l);
+  font-family: var(--font-brand);
+  font-weight: var(--brand-weight);
+  font-size: var(--brand-size);
+  text-transform: var(--brand-case);
   letter-spacing: -0.01em;
 }
 .wordmark span {
@@ -65,6 +93,25 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+}
+
+/* Salary, and right under it which seconds it is paid over. */
+.salary-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.clock-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.clock-means {
+  min-width: 0;
+  font-size: var(--text-s);
+  color: var(--text-muted);
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
 }
 
 .salary {
@@ -148,4 +195,64 @@
   margin: 0;
   font-size: var(--text-xs);
   color: var(--text-faint);
+}
+.footnote a {
+  text-decoration-color: var(--line);
+  text-underline-offset: 2px;
+}
+
+/* Your things (D6): a quiet list beside Since you got here. */
+.things {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+}
+.things-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.things-title {
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.things-edit {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-1);
+  font-size: var(--text-s);
+  color: var(--text-muted);
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+}
+.things-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.thing {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-s);
+}
+.thing-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.thing-every {
+  flex: none;
+  color: var(--text-muted);
 }

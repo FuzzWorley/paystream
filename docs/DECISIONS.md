@@ -213,3 +213,77 @@ with a small motion (none with reduced motion). Still derived from elapsed time 
   difference is coins still on their way.
 - Stepping to a bigger unit can drop a lane's total, e.g. 43¢ in 1¢ coins is $0 in $1
   coins: in that unit, none has landed yet.
+
+## D20 — Arcade keeps its neon (2026-10-17)
+
+Arcade's recipient colours are the wireframe's phosphor neons. The dataviz validator, run
+against Arcade's `#0c0a14`, puts all five above its dark lightness band. Chroma, adjacent CVD
+separation and contrast pass, and so does the normal-vision floor. Across all pairs, You
+(yellow) and Medicare (green) are close for protan vision (ΔE 6.1), which the validator allows
+only with secondary encoding. Every Arcade row is named, which satisfies that. The owner saw
+it and liked it.
+
+VT323 reads small, so Arcade sets the shared type scale larger (`--text-m` 21px), square
+corners (`--radius-* 0`) and instant transitions through tokens. The wordmark takes its face
+and case from new brand tokens (`--font-brand`, `--brand-case`), so the shared header stays
+shared. The combined Taxes row is a neutral (`#b9b3d6`), as in River (D18).
+
+## D21 — Skins load when chosen; the screen switches once loaded (2026-10-17)
+
+A skin is `{ id, name, schemes, load() }`, and `load()` brings its Hero, fonts, tokens and
+coin sound. River ships in the main bundle so a first visit paints without waiting on a chunk.
+Arcade is a separate chunk of about 3 KB plus its fonts, so River users never download Press
+Start 2P. The skin on screen (`activeSkin`) changes only after the chosen one has loaded, so
+a switch never shows one skin's layout in another's half-loaded styles. The first render waits
+for the saved skin. Offline before Arcade was cached, a switch quietly stays put. Once
+installed, the service worker precaches both skins.
+
+## D22 — The skin switch is in the header; the clock moves under the salary (2026-10-17)
+
+The owner wanted the skin switch prominent and at the top. A phone header can't hold the
+wordmark, the clock toggle, a skin switch and the Numbers button (about 365px against 350px
+available), so the header is wordmark · **River | Arcade** · Numbers. The **24 h | At work**
+toggle moves directly under the salary, with what it means beside it ("every second of the
+year", "40 h a week × 52 weeks", which links to the clock on Your numbers). It reads better
+there: it's about how the salary is earned. *Amends spec §4.*
+
+## D23 — Your numbers (2026-10-17)
+
+The shared settings screen (D5), built from the MintSettings wireframe:
+
+- **Typed rates replace calculated ones in place.** Each tax's field shows its calculated
+  rate as the placeholder ("10.23"). Typing makes it a flat share of salary with no cap (D2),
+  and "use calculated" takes it back. Rates that add up to more than the salary stop the You
+  stream and say so, rather than drawing a negative stream.
+- **The work week is remembered** (`workWeek`), so a 37.5 h × 48 week survives switching to
+  24 h and back. Older saves take it from their work clock.
+- **The wage-cap date** is said in words ("Social Security stops on Sep 27 for you"), as is
+  having no cap with a typed rate. Married filing jointly notes it assumes one earner's wages
+  (D12).
+- **Your things** (D6) are edited here, at most 8, and listed on the Stream screen below
+  *Since you got here* ("A coffee every 45 min", at take-home's rate right now).
+- **Sources** list the table's citations; the Stream footnote's "2026 tax tables" links to
+  them.
+- **Privacy** has its own page, with a "Forget my numbers" button that deletes the save.
+
+## D24 — Coin sounds in both skins, synthesised (2026-10-17)
+
+Sound is off by default (spec §3). When it's on, each coin reaching you plays the active
+skin's voice: Arcade's square-wave coin, and a soft falling sine "drip" for River, so the
+switch means something in either skin. Voices are a few lines of Web Audio, with no audio
+files to download. The audio context is created only after sound is switched on, and resumes
+on the first tap after a reload. Coins landing faster than every 90 ms are thinned rather
+than blurred into a buzz.
+
+## D25 — Phase 5 checks: install, no-leak, performance (2026-10-17)
+
+- **Installable** via `vite-plugin-pwa`: a manifest with icons rendered from `public/icon.svg`
+  (`scripts/icons.mjs`), and a precaching service worker. Installing also keeps Safari from
+  clearing storage after seven idle days.
+- **`npm run ux:noleak`**, in CI: types unusual values into every field, visits every screen
+  in every skin, and fails if any request carries one or goes off-site. First run, measured
+  against the local preview build: 27 requests, none carrying input, all same-origin.
+- **`npm run ux:perf`**, a regression signal rather than a real phone: the Stream screen ran at
+  62 fps in both skins with the CPU slowed 4×, no frame over 33 ms (worst 19 ms). The entry
+  script was 60.9 KB (21.6 KB gzip) and the stylesheet 16.9 KB (3.8 KB gzip). Measured in
+  headless Chromium on the development Mac, 2026-10-17.

@@ -1,0 +1,319 @@
+/* Your numbers and Privacy: shared screens, themed only through tokens (D5). */
+.numbers-header {
+  justify-content: flex-start;
+  gap: var(--space-3);
+}
+.numbers-title {
+  margin: 0;
+  font-size: var(--text-l);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.numbers {
+  gap: var(--space-4);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+}
+.card-title {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.card-row {
+  min-height: var(--tap);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-m);
+}
+.card-note {
+  margin: 0;
+  font-size: var(--text-s);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+.card-warning {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--medicare);
+  font-size: var(--text-s);
+  color: var(--text);
+}
+
+/* Inputs on a card: the page background, so they read as wells in the surface. */
+.field {
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-m);
+}
+.field:focus-within {
+  border-color: var(--focus);
+}
+select.field {
+  max-width: 62%;
+  font-weight: 600;
+}
+
+/* One row per stream: name and yearly figure, then its rate control beneath. */
+.num-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--line);
+}
+.num-row:first-of-type {
+  border-top: 0;
+}
+.num-row-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.num-dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.num-label {
+  flex: 1;
+  font-weight: 600;
+}
+.num-amount {
+  white-space: nowrap;
+}
+.num-row-control {
+  display: flex;
+  padding-left: calc(10px + var(--space-2));
+}
+.num-keep .num-label,
+.num-keep .num-amount {
+  color: var(--text);
+}
+
+.rate-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.rate-wrap {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 var(--space-3);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+}
+.rate-wrap:focus-within {
+  border-color: var(--focus);
+}
+.rate-input {
+  width: 3.4em;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--text-m);
+  text-align: right;
+  outline: none;
+}
+.rate-input::placeholder {
+  color: var(--text-muted);
+}
+.rate-percent {
+  margin-left: 2px;
+  color: var(--text-muted);
+}
+.rate-hint {
+  font-size: var(--text-s);
+  color: var(--text-faint);
+}
+.rate-reset,
+.button-quiet {
+  min-height: var(--tap);
+  padding: 0 var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--text-s);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--line);
+  cursor: pointer;
+}
+.button-quiet {
+  align-self: flex-start;
+  padding: 0;
+}
+.button-quiet:disabled {
+  color: var(--text-faint);
+  text-decoration: none;
+  cursor: default;
+}
+
+/* Radio, then its words; anything more (the work hours) sits under the words. */
+.radio-row {
+  min-height: var(--tap);
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+.radio-row input[type='radio'] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--you);
+}
+.clock-hours {
+  grid-column: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-s);
+}
+.clock-number {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-2);
+  font-size: var(--text-s);
+  color: var(--text-muted);
+}
+.clock-number input {
+  width: 2.6em;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--text-m);
+  text-align: right;
+  outline: none;
+}
+
+.things-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.things-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.things-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 6.5em var(--tap);
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+}
+.things-name {
+  min-width: 0;
+  width: 100%;
+}
+.things-amount {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--text-muted);
+}
+.things-amount input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--text-m);
+  outline: none;
+}
+.things-remove {
+  width: var(--tap);
+  height: var(--tap);
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+.things-every {
+  grid-column: 1 / -1;
+  font-size: var(--text-s);
+  color: var(--text-muted);
+}
+
+/* A checkbox drawn as a switch; still a checkbox to assistive tech (role="switch"). */
+.switch {
+  appearance: none;
+  flex: none;
+  position: relative;
+  width: 44px;
+  height: 26px;
+  margin: 0;
+  border-radius: var(--radius-pill);
+  background: var(--line);
+  cursor: pointer;
+  transition: background var(--duration-ui) var(--ease-out);
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--text);
+  transition: transform var(--duration-ui) var(--ease-out);
+}
+.switch:checked {
+  background: var(--you);
+}
+.switch:checked::after {
+  transform: translateX(18px);
+}
+
+.sources {
+  margin: 0;
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-s);
+}
+.sources a {
+  text-decoration-color: var(--line);
+  text-underline-offset: 2px;
+}
+
+.prose p {
+  margin: 0;
+  font-size: var(--text-m);
+  text-wrap: pretty;
+}

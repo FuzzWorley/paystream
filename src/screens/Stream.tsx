@@ -2,13 +2,15 @@ import { FILING_STATUS_LABELS } from '../lib/labels';
 import { formatPercent } from '../lib/format';
 import { table } from '../lib/model';
 import { settings } from '../lib/settings';
-import { defaultSkin, skins } from '../skins';
+import { activeSkin } from '../skins';
 import { ClockToggle } from '../ui/ClockToggle';
+import { NumbersLink } from '../ui/NumbersLink';
 import { SalaryField } from '../ui/SalaryField';
 import { SinceYouGotHere } from '../ui/SinceYouGotHere';
+import { SkinPicker } from '../ui/SkinPicker';
 import { StreamNotes } from '../ui/StreamNotes';
 import { StreamTable } from '../ui/StreamTable';
-import './Stream.css';
+import { YourThings } from '../ui/YourThings';
 
 function stateNote(rate: number | null): string {
   if (rate === null) return 'state tax not set';
@@ -17,20 +19,25 @@ function stateNote(rate: number | null): string {
 
 export function Stream() {
   const s = settings.value;
-  const skin = skins.find((k) => k.id === s.skin) ?? defaultSkin;
-  const { Hero } = skin;
+  const { Hero } = activeSkin.value.module;
   return (
     <div class="screen">
       <header class="screen-header">
         <span class="wordmark">
           pay<span>stream</span>
         </span>
-        <ClockToggle />
+        <div class="header-actions">
+          <SkinPicker place="header" />
+          <NumbersLink />
+        </div>
       </header>
 
       <main class="screen-main">
         <h1 class="visually-hidden">Your pay, by the second</h1>
-        <SalaryField />
+        <div class="salary-block">
+          <SalaryField />
+          <ClockToggle />
+        </div>
         <Hero />
         <StreamNotes />
         <StreamTable />
@@ -38,9 +45,11 @@ export function Stream() {
 
       <footer class="screen-footer">
         <SinceYouGotHere />
+        <YourThings />
         <p class="footnote">
-          {String(table.value.taxYear)} tax tables · {FILING_STATUS_LABELS[s.filingStatus].toLowerCase()} ·{' '}
-          {stateNote(s.stateRate)} · estimates, not tax advice
+          <a href="/numbers#sources">{String(table.value.taxYear)} tax tables</a> ·{' '}
+          {FILING_STATUS_LABELS[s.filingStatus].toLowerCase()} · {stateNote(s.stateRate)} · estimates, not tax
+          advice · <a href="/privacy">privacy</a>
         </p>
       </footer>
     </div>

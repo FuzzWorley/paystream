@@ -20,6 +20,11 @@
   --font-ui: system-ui, sans-serif;
   --font-display: Georgia, serif;
   --font-figures: ui-monospace, monospace;
+  /* The wordmark: a skin may give it its own face and case. */
+  --font-brand: var(--font-ui);
+  --brand-case: none;
+  --brand-size: var(--text-l);
+  --brand-weight: 600;
 
   /* Shared */
   --space-1: 4px;

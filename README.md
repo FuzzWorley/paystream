@@ -5,7 +5,8 @@ Security and Medicare taking their share in streams beside it.
 
 Everything runs in your browser. Nothing you type is sent anywhere.
 
-**Status:** being built — a placeholder is live at https://paystream.bitcopia.workers.dev. See
+**Status:** v1 (the salary stream, in River and Arcade skins, installable) is built; the
+latest deploy is at https://paystream.bitcopia.workers.dev. See
 [`docs/PRODUCT_BRIEF.md`](docs/PRODUCT_BRIEF.md) and the phased plan in
 [`docs/ENGINEERING_SPEC.md`](docs/ENGINEERING_SPEC.md).
 

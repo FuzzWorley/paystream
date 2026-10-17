@@ -1,0 +1,12 @@
+/** The way into Your numbers, from the header of every stream screen. */
+export function NumbersLink() {
+  return (
+    <a class="icon-button" href="/numbers" aria-label="Your numbers" title="Your numbers">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h10M18 7h2M4 17h4M12 17h8" />
+        <circle cx="16" cy="7" r="2" />
+        <circle cx="10" cy="17" r="2" />
+      </svg>
+    </a>
+  );
+}

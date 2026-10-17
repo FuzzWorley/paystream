@@ -23,7 +23,7 @@ for (const skin of SKINS) {
       colorScheme: skin.schemes[0],
     });
     const page = await context.newPage();
-    await openScreen(page, screen);
+    await openScreen(page, screen, skin);
 
     const m = await page.evaluate(() => {
       // Content inside a scroll container cannot widen the page, and a fixed bar only

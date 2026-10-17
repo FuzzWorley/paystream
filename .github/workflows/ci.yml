@@ -21,3 +21,5 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run ux:up
       - run: npm run ux:measure
+      # Nothing typed may appear in any request, and no request may leave the site (rule 1).
+      - run: npm run ux:noleak

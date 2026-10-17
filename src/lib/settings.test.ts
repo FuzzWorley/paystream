@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULTS, EXAMPLE_SALARY, parseSettings, taxInputs } from './settings';
+import { DEFAULTS, EXAMPLE_SALARY, MAX_THING_NAME, MAX_THINGS, parseSettings, taxInputs } from './settings';
 
 describe('parseSettings', () => {
   it('falls back to defaults for anything that is not a saved object', () => {
@@ -27,6 +27,7 @@ describe('parseSettings', () => {
       stateRate: 0.05,
       overrides: { federal: 0.18 },
       clock: { kind: 'work', hoursPerWeek: 37.5, weeksPerYear: 48 },
+      workWeek: { hoursPerWeek: 37.5, weeksPerYear: 48 },
       coin: 0.1,
       timeUnit: 'week',
       combineTaxes: true,
@@ -34,6 +35,25 @@ describe('parseSettings', () => {
       skin: 'arcade',
       sound: true,
     });
+  });
+
+  it('keeps the work week while the 24-hour clock is on', () => {
+    const s = parseSettings({ clock: { kind: 'around' }, workWeek: { hoursPerWeek: 30, weeksPerYear: 46 } });
+    expect(s.clock).toEqual({ kind: 'around' });
+    expect(s.workWeek).toEqual({ hoursPerWeek: 30, weeksPerYear: 46 });
+  });
+
+  it('falls back to the default work week when neither the save nor its clock has one', () => {
+    expect(parseSettings({ workWeek: { hoursPerWeek: 200, weeksPerYear: 52 } }).workWeek).toEqual(
+      DEFAULTS.workWeek,
+    );
+  });
+
+  it('caps the list of things and the length of their names', () => {
+    const many = Array.from({ length: 12 }, (_, i) => ({ name: `Thing ${String(i)}`, amount: 1 }));
+    const s = parseSettings({ things: [{ name: 'x'.repeat(80), amount: 3 }, ...many] });
+    expect(s.things).toHaveLength(MAX_THINGS);
+    expect(s.things[0]?.name).toHaveLength(MAX_THING_NAME);
   });
 
   it('replaces each bad field with its default, field by field', () => {

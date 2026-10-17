@@ -6,6 +6,7 @@ import {
   COINS,
   stepLadder,
   TIME_UNITS,
+  timeToEarn,
   unitSeconds,
   type Cadence,
   type Coin,
@@ -50,6 +51,9 @@ export interface StreamView {
   timeText: string;
   /** The time frame amount, compact for lanes: "$61 / hour". */
   timeShort: string;
+  /** Its parts, for a skin that sets them its own way: "$61" and "working hour". */
+  timeAmount: string;
+  timeLabel: string;
   /**
    * flowing; dry (nothing flows, on purpose: past the wage cap, no state tax); or unset
    * (waiting for the user's state rate).
@@ -116,15 +120,18 @@ function stillness(stream: LaneId): { kind: 'dry' | 'unset'; status: string; why
   if (stream === 'state' && settings.value.stateRate === 0) {
     return { kind: 'dry', status: 'no state income tax', why: 'No state income tax' };
   }
+  if (stream === 'you' && inputs.value.salary > 0) {
+    return { kind: 'dry', status: 'none', why: 'Your rates leave nothing to take home' };
+  }
   return { kind: 'dry', status: 'none', why: stream === 'you' ? 'Nothing arriving' : 'Nothing to pay' };
 }
 
 /** "$61 every hour" and "$61 / hour", over the chosen time frame (D17). */
-function timeTexts(rate: number): { long: string; short: string } {
+function timeTexts(rate: number): { long: string; short: string; amount: string; word: string } {
   const unit = settings.value.timeUnit;
   const amount = formatAmount(rate * secondsIn(unit));
   const word = timeWord(unit, clock.value);
-  return { long: `${amount} every ${word}`, short: `${amount} / ${word}` };
+  return { long: `${amount} every ${word}`, short: `${amount} / ${word}`, amount, word };
 }
 
 function view(stream: LaneId, label: string, rate: number, got: number): StreamView {
@@ -147,6 +154,8 @@ function view(stream: LaneId, label: string, rate: number, got: number): StreamV
     unitText: c ? `${formatCoin(c.coin)} every ${formatDuration(c.every) ?? ''}` : (still?.why ?? ''),
     timeText: c ? time.long : (still?.why ?? ''),
     timeShort: c ? time.short : (still?.status ?? ''),
+    timeAmount: time.amount,
+    timeLabel: time.word,
     kind: still?.kind ?? 'flowing',
     status: still?.status ?? '',
   };
@@ -174,6 +183,66 @@ export const isExample = computed(() => settings.value.salary === null);
 
 /** Yearly figures; recomputed when inputs change, not per frame. */
 export const annual = computed(() => annualBreakdown(inputs.value, table.value));
+
+/** Typed rates that leave nothing for take-home: the You stream stops, and Numbers says why. */
+export const overTaxed = computed(() => inputs.value.salary > 0 && annual.value.you < 0);
+
+function sharesOf(year: PerStream, salary: number): PerStream {
+  const share = (s: Stream) => (salary > 0 ? year[s] / salary : 0);
+  return {
+    you: share('you'),
+    federal: share('federal'),
+    socialSecurity: share('socialSecurity'),
+    state: share('state'),
+    medicare: share('medicare'),
+  };
+}
+
+/** Each stream's share of salary over the year: "9.8%" beside its yearly figure. */
+export const shares = computed(() => sharesOf(annual.value, inputs.value.salary));
+
+export type WageCap =
+  | { kind: 'override' }
+  | { kind: 'never'; wageBase: number }
+  | { kind: 'upcoming' | 'reached'; on: number; wageBase: number };
+
+/** Where Social Security stands against this year's wage cap (D11). Not per frame: no `now`. */
+export const wageCap = computed<WageCap>(() => {
+  const wageBase = table.value.socialSecurity.wageBase;
+  if (inputs.value.overrides.socialSecurity !== undefined) return { kind: 'override' };
+  const on = ssStopsAt.value;
+  if (on === null) return { kind: 'never', wageBase };
+  return { kind: ssCappedOn.value !== null ? 'reached' : 'upcoming', on, wageBase };
+});
+
+/** Take-home per second, never negative. A number, so readers re-render only when it changes. */
+export const youRate = computed(() => Math.max(0, rates.value.you));
+
+export interface ThingView {
+  name: string;
+  amount: number;
+  /** "12 min": how long take-home takes to earn it at today's rate; null when nothing arrives. */
+  every: string | null;
+}
+
+/** Your things (D6), priced in take-home time. */
+export const thingViews = computed<ThingView[]>(() =>
+  settings.value.things.map((t) => ({
+    name: t.name.trim() || 'Something',
+    amount: t.amount,
+    every: takeHomeTime(t.amount),
+  })),
+);
+
+/** "12 min": how long take-home takes to earn `amount` right now; null when nothing arrives. */
+export function takeHomeTime(amount: number): string | null {
+  return formatDuration(timeToEarn(amount, youRate.value));
+}
+
+/** Each tax's share as the 2026 tables work it out, ignoring any typed rate: the placeholder. */
+export const calculatedShares = computed(() =>
+  sharesOf(annualBreakdown({ ...inputs.value, overrides: {} }, table.value), inputs.value.salary),
+);
 
 // The two steppers (D17): each always means one thing. Unit is the coin money arrives in;
 // time is the frame amounts are shown over. They are independent.

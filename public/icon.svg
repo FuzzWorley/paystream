@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full bleed, with the mark inside the central 80% so a maskable crop never cuts it. -->
+  <rect width="512" height="512" fill="#0b1020"/>
+  <path d="M120 196h272" stroke="#25ac73" stroke-width="36" stroke-linecap="round"/>
+  <path d="M120 268h168" stroke="#5a92e7" stroke-width="24" stroke-linecap="round"/>
+  <path d="M120 328h104" stroke="#c97f21" stroke-width="24" stroke-linecap="round"/>
+  <circle cx="352" cy="308" r="44" fill="#25ac73"/>
+</svg>

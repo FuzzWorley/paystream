@@ -1,0 +1,49 @@
+/*
+ * Arcade: a CRT cabinet (docs/design, Arcade.dc.html). Recipient colours are the wireframe's
+ * phosphor neons, deliberately brighter than the dataviz dark band (D20); every row is named,
+ * which the validator's all-pairs warning (You/Medicare, protan ΔE 6.1) requires.
+ * Pixel face for headings and scores; VT323 for forms and running text, at sizes it reads at.
+ */
+[data-skin='arcade'] {
+  --bg: #0c0a14;
+  --surface: #1a1430;
+  --text: #f4f1ff;
+  --text-muted: #a49dc2;
+  --text-faint: #7a7397;
+  --line: #3b3260;
+  --focus: #ffe14d;
+  --you: #ffe14d;
+  --federal: #3ee8ff;
+  --social-security: #ff8a3d;
+  --state: #ff3ea5;
+  --medicare: #6bff8a;
+  --taxes: #b9b3d6;
+  --font-ui: 'VT323', ui-monospace, monospace;
+  --font-display: 'Press Start 2P', ui-monospace, monospace;
+  --font-figures: 'VT323', ui-monospace, monospace;
+  --font-brand: 'Press Start 2P', ui-monospace, monospace;
+  --brand-case: uppercase;
+  --brand-size: 13px;
+  --brand-weight: 400;
+  --text-xs: 16px;
+  --text-s: 19px;
+  --text-m: 21px;
+  --text-l: 24px;
+  --radius-s: 0;
+  --radius-m: 0;
+  --radius-pill: 0;
+  --duration-ui: 0ms;
+}
+
+/* The tube: a glow behind everything and scanlines over it, never in the way of a tap. */
+[data-skin='arcade'] body {
+  background: radial-gradient(ellipse 120% 60% at 50% 20%, #1a1430 0%, transparent 70%) no-repeat var(--bg);
+}
+[data-skin='arcade'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgb(255 255 255 / 3%) 0 1px, transparent 1px 3px);
+  box-shadow: inset 0 0 80px rgb(0 0 0 / 70%);
+}

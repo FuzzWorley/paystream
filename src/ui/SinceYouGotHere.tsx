@@ -5,7 +5,8 @@ export function SinceYouGotHere() {
   let you = 0;
   let taxes = 0;
   for (const v of views.value) {
-    if (v.stream === 'you') you = v.earned;
+    // Typed rates can tax more than the salary; take-home then stops rather than going negative.
+    if (v.stream === 'you') you = Math.max(0, v.earned);
     else taxes += v.earned;
   }
   return (

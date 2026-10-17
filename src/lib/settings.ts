@@ -15,6 +15,13 @@ export interface Thing {
   amount: number;
 }
 
+export interface WorkWeek {
+  hoursPerWeek: number;
+  weeksPerYear: number;
+}
+
+export const MAX_THINGS = 8;
+
 export interface Settings {
   /** Null until typed; the screen then shows EXAMPLE_SALARY, marked as an example. */
   salary: number | null;
@@ -23,6 +30,8 @@ export interface Settings {
   stateRate: number | null;
   overrides: Overrides;
   clock: Clock;
+  /** The hours the work clock uses, kept while the 24-hour clock is on. */
+  workWeek: WorkWeek;
   /** The unit money arrives in: dot size and "1¢ every 5.1 s" (D17). */
   coin: CoinChoice;
   /** The time frame amounts are shown over: "$7.03 every hour" (D17). */
@@ -44,6 +53,7 @@ export const DEFAULTS: Settings = {
   stateRate: null,
   overrides: {},
   clock: { kind: 'around' },
+  workWeek: { hoursPerWeek: 40, weeksPerYear: 52 },
   coin: 'auto',
   timeUnit: 'hour',
   combineTaxes: false,
@@ -61,14 +71,20 @@ const num = (v: unknown, min: number, max: number): number | undefined =>
 const oneOf = <T extends string>(v: unknown, options: readonly T[]): T | undefined =>
   options.find((o) => o === v);
 
+export const WORK_LIMITS = { hoursPerWeek: 168, weeksPerYear: 52 } as const;
+
+function parseWorkWeek(v: unknown): WorkWeek | undefined {
+  if (!isRecord(v)) return undefined;
+  const hoursPerWeek = num(v.hoursPerWeek, 1, WORK_LIMITS.hoursPerWeek);
+  const weeksPerYear = num(v.weeksPerYear, 1, WORK_LIMITS.weeksPerYear);
+  return hoursPerWeek && weeksPerYear ? { hoursPerWeek, weeksPerYear } : undefined;
+}
+
 function parseClock(v: unknown): Clock | undefined {
   if (!isRecord(v)) return undefined;
   if (v.kind === 'around') return { kind: 'around' };
-  const hoursPerWeek = num(v.hoursPerWeek, 1, 168);
-  const weeksPerYear = num(v.weeksPerYear, 1, 52);
-  return v.kind === 'work' && hoursPerWeek && weeksPerYear
-    ? { kind: 'work', hoursPerWeek, weeksPerYear }
-    : undefined;
+  const week = parseWorkWeek(v);
+  return v.kind === 'work' && week ? { kind: 'work', ...week } : undefined;
 }
 
 function parseOverrides(v: unknown): Overrides {
@@ -81,23 +97,30 @@ function parseOverrides(v: unknown): Overrides {
   return out;
 }
 
+export const MAX_THING_NAME = 40;
+
 function parseThings(v: unknown): Thing[] | undefined {
   if (!Array.isArray(v)) return undefined;
-  return v.flatMap((t: unknown) => {
-    if (!isRecord(t) || typeof t.name !== 'string') return [];
-    const amount = num(t.amount, 0.01, MAX_SALARY);
-    return amount ? [{ name: t.name.slice(0, 60), amount }] : [];
-  });
+  return v
+    .flatMap((t: unknown) => {
+      if (!isRecord(t) || typeof t.name !== 'string') return [];
+      const amount = num(t.amount, 0.01, MAX_SALARY);
+      return amount ? [{ name: t.name.slice(0, MAX_THING_NAME), amount }] : [];
+    })
+    .slice(0, MAX_THINGS);
 }
 
 export function parseSettings(raw: unknown): Settings {
   if (!isRecord(raw)) return DEFAULTS;
+  const clock = parseClock(raw.clock) ?? DEFAULTS.clock;
   return {
     salary: raw.salary === null ? null : (num(raw.salary, 0, MAX_SALARY) ?? DEFAULTS.salary),
     filingStatus: oneOf(raw.filingStatus, FILING_STATUSES) ?? DEFAULTS.filingStatus,
     stateRate: num(raw.stateRate, 0, 1) ?? null,
     overrides: parseOverrides(raw.overrides),
-    clock: parseClock(raw.clock) ?? DEFAULTS.clock,
+    clock,
+    // A save from before workWeek existed keeps the hours its work clock had.
+    workWeek: parseWorkWeek(raw.workWeek) ?? parseWorkWeek(clock) ?? DEFAULTS.workWeek,
     coin: COINS.find((c) => c === raw.coin) ?? DEFAULTS.coin,
     timeUnit: oneOf(raw.timeUnit, TIME_UNITS) ?? DEFAULTS.timeUnit,
     combineTaxes: typeof raw.combineTaxes === 'boolean' ? raw.combineTaxes : DEFAULTS.combineTaxes,
@@ -128,6 +151,16 @@ function load(): Settings {
 }
 
 export const settings = signal<Settings>(load());
+
+/** Deletes the save in this browser and goes back to a first visit's settings. */
+export function forgetSettings(): void {
+  try {
+    localStorage.removeItem(KEY);
+  } catch {
+    // Nothing was saved, or storage is blocked; either way nothing remains.
+  }
+  settings.value = DEFAULTS;
+}
 
 let askedToPersist = false;
 
