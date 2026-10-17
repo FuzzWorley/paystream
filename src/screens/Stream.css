@@ -129,6 +129,9 @@
 .since-you {
   color: var(--you);
 }
+.since-time {
+  color: var(--text);
+}
 
 .footnote {
   margin: 0;

@@ -1,21 +1,37 @@
 import type { Clock } from './types';
 
-/** How rates are shown (D14): time per coin, or an amount per minute, hour or day. */
-export const RATE_UNITS = ['penny', 'minute', 'hour', 'day'] as const;
-export type RateUnit = (typeof RATE_UNITS)[number];
-export type TimeUnit = Exclude<RateUnit, 'penny'>;
+/** Time frames an amount can be shown over, shortest first (D17). */
+export const TIME_UNITS = ['second', 'minute', 'hour', 'day', 'week', 'month', 'year'] as const;
+export type TimeUnit = (typeof TIME_UNITS)[number];
 
-/** Seconds in a minute, hour or day of earning; on the work clock a day is a workday. */
-export function unitSeconds(unit: TimeUnit, clock: Clock): number {
-  if (unit === 'minute') return 60;
-  if (unit === 'hour') return 3600;
-  return clock.kind === 'around' ? 86_400 : (clock.hoursPerWeek / 5) * 3600;
+/**
+ * Seconds of earning in a span. On the work clock a day is a workday (weekly hours ÷ 5) and a
+ * week is the working week; a month is always a twelfth of the earning year.
+ */
+export function unitSeconds(unit: TimeUnit, clock: Clock, earningYear: number): number {
+  const work = clock.kind === 'work';
+  switch (unit) {
+    case 'second':
+      return 1;
+    case 'minute':
+      return 60;
+    case 'hour':
+      return 3600;
+    case 'day':
+      return work ? (clock.hoursPerWeek / 5) * 3600 : 86_400;
+    case 'week':
+      return work ? clock.hoursPerWeek * 3600 : 7 * 86_400;
+    case 'month':
+      return earningYear / 12;
+    case 'year':
+      return earningYear;
+  }
 }
 
 /** Coins a stream can be counted in, smallest first, in dollars. */
 export const COINS = [0.01, 0.1, 1, 10, 100] as const;
 export type Coin = (typeof COINS)[number];
-/** 'auto' lets each stream pick its own readable coin; a coin counts every stream in it. */
+/** 'auto' picks the readable coin for take-home until the user chooses one. */
 export type CoinChoice = Coin | 'auto';
 
 export interface Cadence {
@@ -34,26 +50,9 @@ export function cadence(ratePerSecond: number, choice: CoinChoice = 'auto'): Cad
   return { coin, every: coin / ratePerSecond };
 }
 
-/** A coin is worth offering while your own stream drops one between every 0.2 s and every hour. */
-const SENSIBLE = { fastest: 0.2, slowest: 3600 };
-
-/**
- * The coins worth cycling through for a take-home rate: 'auto' first, then each sensible
- * coin, skipping one that would look the same as 'auto' (every stream already on it).
- */
-export function coinChoices(youRate: number, autoCoins: readonly Coin[]): CoinChoice[] {
-  const sensible = COINS.filter(
-    (c) => youRate > 0 && c / youRate >= SENSIBLE.fastest && c / youRate <= SENSIBLE.slowest,
-  );
-  const first = autoCoins[0];
-  const uniform = first !== undefined && autoCoins.every((c) => c === first) ? first : null;
-  return ['auto', ...sensible.filter((c) => c !== uniform)];
-}
-
-/** The choice after `current`, wrapping to 'auto'; a coin no longer offered goes back to 'auto'. */
-export function nextCoinChoice(current: CoinChoice, choices: readonly CoinChoice[]): CoinChoice {
-  const i = choices.indexOf(current);
-  return choices[i + 1] ?? 'auto';
+/** The next rung up or down a ladder (coins, time frames); null past either end. */
+export function stepLadder<T>(ladder: readonly T[], rung: T, direction: 1 | -1): T | null {
+  return ladder[ladder.indexOf(rung) + direction] ?? null;
 }
 
 /** Seconds to earn `amount` at `ratePerSecond` ("a month's rent every 9.4 days"). */

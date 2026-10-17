@@ -121,6 +121,9 @@ well-timed plunger and nudges beat the taxman. Details in `ENGINEERING_SPEC.md` 
 
 ## D14 — Show rates per penny, minute, hour or day (2026-10-17)
 
+*Interaction superseded by D17 (steppers replace tap-to-cycle); the money unit still picks
+itself.*
+
 The owner wants users to choose "per minute", "per hour", "per day". The penny view ("1¢ every
 5.5 s") is the fun one; an amount per unit ("$6.60 an hour") is the one people compare with
 their lives. Both are the same rate, so this is a display unit:
@@ -152,6 +155,8 @@ Lanes show rates compactly ("1¢ / 5.1 s", "$7.03 / hour"); the hero keeps the s
 
 ## D16 — A dot's size is its coin; tap a coin to change it for the whole river (2026-10-17)
 
+*Dot sizing and the one shared coin stand; tap-to-cycle is superseded by D17.*
+
 The owner noticed that take-home's dots were always bigger, even when every lane counted in
 the same coin. Size now encodes value only: 1¢, 10¢, $1, $10 and $100 each have one dot size in
 every lane, and every rail has the same thickness. Tapping any coin (in the hero or a lane)
@@ -159,3 +164,22 @@ cycles one choice for the whole river: auto (each stream picks a readable coin),
 at which take-home lands between every 0.2 s and every hour, skipping one that would look the
 same as auto. One shared coin, not one per lane, because then equal dots are equal money and
 faster dots are simply more of it. In the hero, the coin and the time are separate controls.
+
+## D17 — Two independent steppers: unit and time (2026-10-17)
+
+The owner wanted up and down for unit size and time size instead of cycling, and — after a
+first attempt where one control fixed a side and the other followed — that **each control
+always means one thing**:
+
+- **Unit** is the coin money arrives in: 1¢ … $100. It sets the dot size (D16) and the
+  headline "1¢ every 5.1 s". On first visit it is 'auto', take-home's readable coin, shared by
+  every lane, until the user steps.
+- **Time** is the frame amounts are shown over: second, minute, hour, day, week, month, year
+  (working time on the work clock; a month is a twelfth of the earning year). It sets the
+  second line, "$7.03 every hour", and every lane's figure ("$0.88 / hour"), so the taxes
+  compare in one frame.
+- The two are independent; neither ever shows a value derived from the other. The hero is
+  plain text: no hidden taps.
+- *Since you got here* is today's settings over the whole visit, so flipping 24 h / At work
+  (or changing the salary) shows that version of the same minutes, beside the time on the
+  page. It replaced banking each stretch at the old setting.

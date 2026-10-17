@@ -6,6 +6,7 @@ import {
   formatDate,
   formatDigits,
   formatDuration,
+  formatElapsed,
   formatPercent,
   formatUsd,
 } from './format';
@@ -90,6 +91,19 @@ describe('formatCountdown', () => {
   it('is null when nothing is coming', () => {
     expect(formatCountdown(Infinity)).toBeNull();
     expect(formatCountdown(-1)).toBeNull();
+  });
+});
+
+describe('formatElapsed', () => {
+  it.each([
+    [0, '0 s'],
+    [12.9, '12 s'],
+    [59.99, '59 s'],
+    [252.4, '4m 12s'],
+    [3900, '1h 05m'],
+    [-3, '0 s'],
+  ])('%d s on the page reads %s', (seconds, shown) => {
+    expect(formatElapsed(seconds)).toBe(shown);
   });
 });
 

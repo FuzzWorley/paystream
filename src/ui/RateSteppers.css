@@ -1,0 +1,64 @@
+/* Shared by every skin; tokens only. */
+.steppers {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.stepper {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+.stepper-button {
+  flex: none;
+  width: var(--tap);
+  height: var(--tap);
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text);
+  font: 400 22px var(--font-ui);
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background var(--duration-ui) var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+.stepper-button:active:not(:disabled) {
+  transform: scale(0.9);
+  background: var(--line);
+}
+.stepper-button:disabled {
+  color: var(--text-faint);
+  opacity: 0.4;
+  cursor: default;
+}
+
+.stepper-middle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.15;
+}
+.stepper-name {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.stepper-value {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-m);
+  font-weight: 600;
+  color: var(--text);
+}

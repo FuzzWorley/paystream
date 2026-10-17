@@ -66,8 +66,17 @@ export function formatDate(t: number): string {
  */
 export function formatCountdown(seconds: number): string | null {
   if (!Number.isFinite(seconds) || seconds < 0) return null;
-  if (seconds < 59.95) return `${seconds.toFixed(1)} s`;
-  const s = Math.round(seconds);
+  return seconds < 59.95 ? `${seconds.toFixed(1)} s` : clockSpan(Math.round(seconds));
+}
+
+/** Time on the page, in whole seconds: "12 s", "4m 12s", "1h 05m". */
+export function formatElapsed(seconds: number): string {
+  const s = Math.max(0, Math.floor(seconds));
+  return s < 60 ? `${String(s)} s` : clockSpan(s);
+}
+
+/** A minute or more of whole seconds: "4m 12s", "2h 05m", "3d 4h". */
+function clockSpan(s: number): string {
   const pad = (n: number) => String(n).padStart(2, '0');
   if (s < 3600) return `${String(Math.floor(s / 60))}m ${pad(s % 60)}s`;
   if (s < 86_400) return `${String(Math.floor(s / 3600))}h ${pad(Math.floor((s % 3600) / 60))}m`;

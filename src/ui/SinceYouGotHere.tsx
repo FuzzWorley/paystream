@@ -1,5 +1,5 @@
-import { formatUsd } from '../lib/format';
-import { views } from '../lib/model';
+import { formatElapsed, formatUsd } from '../lib/format';
+import { secondsHere, views } from '../lib/model';
 
 export function SinceYouGotHere() {
   let you = 0;
@@ -10,7 +10,9 @@ export function SinceYouGotHere() {
   }
   return (
     <p class="since">
-      <span>Since you got here</span>
+      <span>
+        Since you got here <span class="since-time figures">· {formatElapsed(secondsHere.value)}</span>
+      </span>
       <span class="figures">
         <span class="since-you">{formatUsd(you, 4)}</span> you · {formatUsd(taxes, 4)} taxes
       </span>

@@ -64,7 +64,8 @@ interface; skins import from `core/`, `lib/`, `ui/`.
 | `overrides` | none | Per stream: a flat % of gross that replaces the calculation |
 | `clock` | `around` | `around` = every second of the year; `work` = hours × weeks (default 40 × 52) |
 | `things` | coffee $5, a month's rent $1,500 | Name + amount (D6) |
-| `rateUnit` | penny | penny, minute, hour or day (D14) |
+| `coin` | auto | the unit: 1¢ … $100, or take-home's readable coin (D17) |
+| `timeUnit` | hour | the time frame: second … year (D17) |
 | `skin` | river | |
 | `sound` | off | |
 
@@ -115,8 +116,9 @@ the smallest coin whose interval is ≥ 1 s, and then the time unit that keeps t
 1 and 100. A stream at zero says why ("stopped for 2026: wage cap reached"), never "every ∞".
 The same function phrases your things ("A month's rent every 9.4 days").
 
-The other rate units (D14) are the same rate times a unit's seconds: 60, 3,600, and 86,400
-around the clock; on the work clock a day is `hoursPerWeek / 5` hours.
+The time-frame amount (D17) is the rate times the frame's seconds: plain clock time
+around the clock; on the work clock a day is `hoursPerWeek / 5` hours and a week
+`hoursPerWeek`; a month is always a twelfth of the earning year.
 
 ### Money in, money out
 
@@ -220,12 +222,12 @@ confirmation checklist comes with this phase.
 
 ### Phase 2: the Stream screen in River
 Salary field (streams start as you type), clock toggle, River's hero, "next penny in…" per
-stream, tap the hero to change the rate unit (D14), *Since you got here*, settings persisted, reduced motion, the screen-reader table,
+stream, unit and time steppers (D17), *Since you got here*, settings persisted, reduced motion, the screen-reader table,
 pause on hidden. Palette validated. This is the first time it's fun, so the owner plays with it
 on a phone.
 
 ### Phase 3: Your numbers and your things
-The Numbers screen (filing status, state %, overrides, clock hours × weeks, rate unit, sound,
+The Numbers screen (filing status, state %, overrides, clock hours × weeks, sound,
 skin) and
 the editable your-things list shown beside *Since you got here*. The wage-cap date. The year
 and source footnote.

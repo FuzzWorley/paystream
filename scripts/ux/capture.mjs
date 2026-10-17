@@ -38,25 +38,21 @@ export const SCREENS = [
     },
   },
   {
-    // Tap the coin twice (auto → 1¢ → 10¢): every stream counted in 10¢.
-    name: 'Stream-170k-dimes',
+    // Unit + once: 10¢ → $1, every stream counted in dollars.
+    name: 'Stream-170k-dollars',
     path: '/',
     setup: async (page) => {
       await page.getByLabel('Salary').fill('170000');
       await page.getByRole('button', { name: 'At work' }).click();
-      const coin = page.locator('.rv-figure .rv-coin');
-      await coin.click();
-      await coin.click();
+      await page.getByRole('button', { name: 'Bigger unit' }).click();
     },
   },
   { name: 'Stream-reduced-motion', path: '/', context: { reducedMotion: 'reduce' } },
   {
-    name: 'Stream-per-hour',
+    // Time + once: hour → day.
+    name: 'Stream-per-day',
     path: '/',
-    setup: async (page) => {
-      await page.getByRole('button', { name: /See it per minute/ }).click();
-      await page.getByRole('button', { name: /See it per hour/ }).click();
-    },
+    setup: (page) => page.getByRole('button', { name: 'Longer time' }).click(),
   },
 ];
 

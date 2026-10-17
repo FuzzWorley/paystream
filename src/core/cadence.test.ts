@@ -1,16 +1,34 @@
 import { describe, expect, it } from 'vitest';
-import { cadence, coinChoices, nextCoinChoice, timeToEarn, unitSeconds } from './cadence';
+import { cadence, COINS, stepLadder, TIME_UNITS, timeToEarn, unitSeconds } from './cadence';
+
+const AROUND = { kind: 'around' } as const;
+const WORK = { kind: 'work', hoursPerWeek: 40, weeksPerYear: 52 } as const;
+const YEAR = 365 * 86_400;
+const WORK_YEAR = 40 * 52 * 3600;
 
 describe('unitSeconds', () => {
-  it('is a plain minute, hour or day around the clock', () => {
-    const around = { kind: 'around' } as const;
-    expect([unitSeconds('minute', around), unitSeconds('hour', around), unitSeconds('day', around)]).toEqual([
-      60, 3600, 86_400,
+  it('is plain clock time around the clock, a month a twelfth of the year', () => {
+    expect(TIME_UNITS.map((u) => unitSeconds(u, AROUND, YEAR))).toEqual([
+      1,
+      60,
+      3600,
+      86_400,
+      7 * 86_400,
+      YEAR / 12,
+      YEAR,
     ]);
   });
 
-  it('makes a day a workday on the work clock', () => {
-    expect(unitSeconds('day', { kind: 'work', hoursPerWeek: 40, weeksPerYear: 52 })).toBe(8 * 3600);
+  it('counts working time on the work clock: a workday, a working week', () => {
+    expect(TIME_UNITS.map((u) => unitSeconds(u, WORK, WORK_YEAR))).toEqual([
+      1,
+      60,
+      3600,
+      8 * 3600,
+      40 * 3600,
+      WORK_YEAR / 12,
+      WORK_YEAR,
+    ]);
   });
 });
 
@@ -32,43 +50,21 @@ describe('cadence', () => {
     expect(cadence(0)).toBeNull();
     expect(cadence(Number.NaN)).toBeNull();
   });
-});
 
-describe('cadence with a chosen coin', () => {
-  it('counts every stream in that coin, however fast or slow', () => {
+  it('counts in a chosen coin, however fast or slow', () => {
     expect(cadence(0.016, 0.01)).toEqual({ coin: 0.01, every: expect.closeTo(0.625, 9) as number });
     expect(cadence(0.001, 1)).toEqual({ coin: 1, every: expect.closeTo(1000, 9) as number });
   });
 });
 
-describe('coinChoices', () => {
-  // $170k at work: take-home ≈ 1.6¢ a second.
-  const youRate = 0.016;
-
-  it('offers auto, then each coin that lands between every 0.2 s and every hour', () => {
-    expect(coinChoices(youRate, [0.1, 0.01, 0.01, 0.01])).toEqual(['auto', 0.01, 0.1, 1, 10]);
-  });
-
-  it('skips a coin that would look the same as auto', () => {
-    expect(coinChoices(0.002, [0.01, 0.01, 0.01])).toEqual(['auto', 0.1, 1]);
-  });
-
-  it('offers only auto when nothing flows', () => {
-    expect(coinChoices(0, [])).toEqual(['auto']);
-  });
-});
-
-describe('nextCoinChoice', () => {
-  const choices = ['auto', 0.01, 0.1, 1] as const;
-
-  it('steps through and wraps back to auto', () => {
-    expect(nextCoinChoice('auto', choices)).toBe(0.01);
-    expect(nextCoinChoice(0.1, choices)).toBe(1);
-    expect(nextCoinChoice(1, choices)).toBe('auto');
-  });
-
-  it('goes back to auto when the current coin is no longer offered', () => {
-    expect(nextCoinChoice(100, choices)).toBe('auto');
+describe('stepLadder', () => {
+  it('steps to the neighbouring rung, and stops at either end', () => {
+    expect(stepLadder(COINS, 0.1, 1)).toBe(1);
+    expect(stepLadder(COINS, 0.1, -1)).toBe(0.01);
+    expect(stepLadder(COINS, 100, 1)).toBeNull();
+    expect(stepLadder(COINS, 0.01, -1)).toBeNull();
+    expect(stepLadder(TIME_UNITS, 'hour', 1)).toBe('day');
+    expect(stepLadder(TIME_UNITS, 'second', -1)).toBeNull();
   });
 });
 
