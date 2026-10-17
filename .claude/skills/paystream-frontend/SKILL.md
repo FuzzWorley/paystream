@@ -38,6 +38,10 @@ inside the fun has to be right, or the joke stops being funny.
 
 ## Visual identity
 
+- **Skins** (River, Arcade — `docs/design/README.md`). A skin is a set of tokens plus its own
+  rendering of the hero stream. Shared screens ("Your numbers", the comparison, your things)
+  are built once and themed by tokens, so each must look deliberate in every skin, not just the
+  one it was built in. Screenshot every screen in every skin.
 - Give it a real point of view: a display face with character for the big numbers, a clean
   face for labels, tabular figures everywhere digits change (so they don't jitter).
 - Every colour, size, radius and duration is a token in `src/styles/tokens.css`. Light and dark
@@ -66,9 +70,10 @@ inside the fun has to be right, or the joke stops being funny.
 
 ## The few things that must stay true
 
-1. **Nothing typed leaves the browser.** No salary in a request, a log, an analytics event, or a
-   URL the server sees. A share link is opt-in and keeps its data in the `#fragment`, which
-   browsers never send. Say so beside the field: "Stays in your browser."
+1. **Signed out, nothing typed leaves the browser.** No salary in a request, a log, an analytics
+   event, or a URL the server sees. A share link is opt-in and keeps its data in the
+   `#fragment`, which browsers never send. Say so beside the field: "Stays in your browser."
+   Signed in, say instead that it's saved to the account so it follows you.
 2. **Tax tables are dated and confirmed.** Brackets, standard deduction and the Social Security
    wage base change yearly; an assistant's memory of them is not a source. Each table carries
    its `taxYear`, `source` URL and `confirmed` flag, ships `confirmed: false`, and an

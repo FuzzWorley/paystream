@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Paystream — salary vs capital gains</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#AFC6FF}a:hover{color:#E8ECF7}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.f{min-height:40px;border:0;border-radius:10px;background:#0B1020;color:#E8ECF7;font:500 15px 'JetBrains Mono',monospace;padding:0 10px;box-sizing:border-box}
+.f:focus-visible{outline:2px solid #6FA8FF;outline-offset:2px}
+.col{flex:1;min-width:0;background:#131A2E;border-radius:18px;padding:14px 12px;display:flex;flex-direction:column;gap:10px}
+.seg{display:flex;align-items:center;justify-content:flex-end;padding-right:6px;box-sizing:border-box;font:500 11px 'JetBrains Mono',monospace;color:#0B1020}
+.lg{display:flex;align-items:center;gap:6px;font-size:11px;color:#C9D0E3}
+.lg i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.track{position:relative;height:12px}
+.drop{position:absolute;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#5BD69B}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #0B1020; color: #E8ECF7; font-family: 'Instrument Sans', sans-serif; display: flex; flex-direction: column; gap: 14px; padding: 14px 16px 16px; overflow: hidden">
+
+  <header style="display: flex; align-items: center; gap: 8px">
+    <a href="River.dc.html" aria-label="Back to the stream" style="width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: #131A2E; color: #E8ECF7">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <h1 style="margin: 0; font-size: 21px; font-weight: 600">Salary vs capital gains</h1>
+  </header>
+
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; background: #131A2E; border-radius: 16px; padding: 12px">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <label for="c-sal" style="font-size: 12px; color: #8A93AD">Salary, a year</label>
+      <input id="c-sal" class="f" value="$75,000">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <label for="c-gain" style="font-size: 12px; color: #8A93AD">Long-term gains</label>
+      <div style="display: flex; gap: 6px; align-items: center">
+        <input id="c-gain" class="f" value="$75,000" style="flex: 1; min-width: 0">
+      </div>
+    </div>
+    <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #C9D0E3">
+      <label for="c-years">Gains realised over</label>
+      <input id="c-years" class="f" value="1" style="width: 48px; text-align: center">
+      <span>year — compared a year at a time</span>
+    </div>
+  </section>
+
+  <section style="display: flex; gap: 10px">
+    <div class="col">
+      <div style="font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #8A93AD">Salary</div>
+      <div style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 30px; line-height: 1">1¢ every {{sal.every}}</div>
+      <div class="track" aria-hidden="true">
+        <sc-for list="{{sal.drops}}" as="dp" hint-placeholder-count="4"><span class="drop" style="left: {{dp.x}}%; opacity: {{dp.op}}"></span></sc-for>
+      </div>
+      <div style="height: 250px; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column-reverse; gap: 2px; background: #0B1020">
+        <div class="seg" style="height: 77.1%; background: #5BD69B">77%</div>
+        <div class="seg" style="height: 10.2%; background: #6FA8FF">10%</div>
+        <div class="seg" style="height: 6.2%; background: #FFB15C">6%</div>
+        <div class="seg" style="height: 5%; background: #C49BFF">5%</div>
+        <div class="seg" style="height: 1.5%; background: #FF7FA8"></div>
+      </div>
+      <div class="mono" style="font-size: 13px">You keep <strong style="color: #5BD69B; font-weight: 500">$57,843</strong></div>
+    </div>
+    <div class="col" style="outline: 1.5px solid #5BD69B">
+      <div style="font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #8A93AD">Gains</div>
+      <div style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 30px; line-height: 1">1¢ every {{gain.every}}</div>
+      <div class="track" aria-hidden="true">
+        <sc-for list="{{gain.drops}}" as="dp" hint-placeholder-count="4"><span class="drop" style="left: {{dp.x}}%; opacity: {{dp.op}}"></span></sc-for>
+      </div>
+      <div style="height: 250px; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column-reverse; gap: 2px; background: #0B1020">
+        <div class="seg" style="height: 93.1%; background: #5BD69B">93%</div>
+        <div class="seg" style="height: 1.9%; background: #6FA8FF"></div>
+        <div class="seg" style="height: 5%; background: #C49BFF">5%</div>
+      </div>
+      <div class="mono" style="font-size: 13px">You keep <strong style="color: #5BD69B; font-weight: 500">$69,833</strong></div>
+    </div>
+  </section>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 6px 14px">
+    <span class="lg"><i style="background: #5BD69B"></i>You</span>
+    <span class="lg"><i style="background: #6FA8FF"></i>Federal</span>
+    <span class="lg"><i style="background: #FFB15C"></i>Social Security</span>
+    <span class="lg"><i style="background: #C49BFF"></i>State</span>
+    <span class="lg"><i style="background: #FF7FA8"></i>Medicare</span>
+  </div>
+
+  <section style="margin-top: auto; display: flex; flex-direction: column; gap: 8px; background: #131A2E; border-radius: 16px; padding: 12px 14px">
+    <div style="font-size: 13px; color: #8A93AD">Since you opened this</div>
+    <div class="mono" style="font-size: 15px; display: flex; justify-content: space-between"><span>salary {{salSince}}</span><span style="color: #5BD69B">gains {{gainSince}}</span></div>
+    <div style="font-size: 14px; line-height: 1.4">Same $75,000, and the gains keep <strong>$11,990 more</strong> a year — no Social Security or Medicare, and a lower federal rate.</div>
+  </section>
+  <p style="margin: 0; font-size: 11px; color: #6B7491">Illustrative 2026 figures · single filer · state taxes both at 5%</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  every(s) {
+    if (s < 10) return s.toFixed(1) + ' s';
+    return Math.round(s) + ' s';
+  }
+  componentDidMount() {
+    var self = this;
+    this.setState({ start: Date.now() - 240000, now: Date.now() });
+    var tick = function () { self.setState({ now: Date.now() }); self.raf = requestAnimationFrame(tick); };
+    this.raf = requestAnimationFrame(tick);
+  }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); }
+  renderVals() {
+    var self = this, st = this.state || {};
+    var now = st.now || Date.now();
+    var elapsed = (now - (st.start || now - 240000)) / 1000;
+    var YEAR = 31536000;
+    var side = function (keep) {
+      var rate = keep / YEAR, cents = rate * elapsed * 100, p = cents - Math.floor(cents);
+      var drops = [];
+      for (var k = 0; k < 4; k++) {
+        var x = (k + p) / 4;
+        drops.push({ x: (x * 100).toFixed(2), op: Math.min(1, x * 4).toFixed(2) });
+      }
+      return { rate: rate, every: self.every(0.01 / rate), drops: drops };
+    };
+    var sal = side(57842.5), gain = side(69832.5);
+    return {
+      sal: sal, gain: gain,
+      salSince: '$' + (sal.rate * elapsed).toFixed(4),
+      gainSince: '$' + (gain.rate * elapsed).toFixed(4)
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Paystream — Mint</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0F2A1E}a:hover{color:#1F7A4D}
+.mono{font-family:'DM Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.seg{flex:1;min-height:44px;border:0;border-radius:999px;font:600 14px 'Bricolage Grotesque',sans-serif;cursor:pointer}
+.seg:focus-visible,.salary:focus-visible,.pill:focus-visible{outline:3px solid #2F5DA8;outline-offset:2px}
+.jar{position:relative;box-sizing:border-box;border:2px solid #0F2A1E;border-top-width:0;border-radius:6px 6px 18px 18px;background:rgba(255,255,255,.55);overflow:hidden}
+.jar::before{content:"";position:absolute;left:-2px;right:-2px;top:0;height:7px;background:#0F2A1E;border-radius:3px}
+.pile{position:absolute;left:6px;right:6px;bottom:6px;display:flex;flex-wrap:wrap-reverse;gap:1px;align-content:flex-start}
+.coin{border-radius:50%;background:radial-gradient(circle at 35% 30%,#F0B184,#B8662E 62%,#8C4A1F);box-shadow:inset 0 0 0 1px rgba(90,40,10,.35)}
+.bar{height:4px;border-radius:2px;background:#C5D6CA;overflow:hidden}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #E6EFE8; color: #0F2A1E; font-family: 'Bricolage Grotesque', sans-serif; display: flex; flex-direction: column; gap: 14px; padding: 18px 20px 16px; overflow: hidden">
+
+  <header style="display: flex; justify-content: space-between; align-items: center">
+    <div style="font-weight: 800; font-size: 21px; letter-spacing: -0.03em; display: flex; align-items: center; gap: 7px">
+      <span class="coin" style="width: 16px; height: 16px; display: inline-block"></span>paystream
+    </div>
+    <a class="pill" href="JarsSettings.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; border-radius: 999px; background: #F6FAF6; text-decoration: none; font-weight: 600; font-size: 14px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h6"></path></svg>
+      Your numbers
+    </a>
+  </header>
+
+  <div style="display: flex; flex-direction: column; gap: 2px">
+    <label for="salary-a" style="font-size: 13px; font-weight: 600; color: #4E6B5C">Your salary</label>
+    <div style="display: flex; align-items: baseline; gap: 2px; border-bottom: 2px solid #0F2A1E">
+      <span style="font-size: 46px; font-weight: 800; letter-spacing: -0.04em">$</span>
+      <input id="salary-a" class="salary" inputmode="numeric" autocomplete="off" value="{{salaryText}}" onChange="{{onSalary}}" style="flex: 1; min-width: 0; border: 0; background: transparent; color: inherit; font: 800 46px 'Bricolage Grotesque', sans-serif; letter-spacing: -0.04em; padding: 0">
+      <span style="font-size: 14px; color: #4E6B5C; font-weight: 600">/ year</span>
+    </div>
+    <p style="margin: 4px 0 0; font-size: 12px; color: #4E6B5C; display: flex; align-items: center; gap: 5px">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+      Stays in your browser — nothing is sent anywhere.
+    </p>
+  </div>
+
+  <div role="group" aria-label="Which clock" style="display: flex; gap: 4px; padding: 4px; background: #D3E2D7; border-radius: 999px">
+    <button type="button" class="seg" aria-pressed="{{isYear}}" onClick="{{setYear}}" style="{{yearStyle}}">Around the clock</button>
+    <button type="button" class="seg" aria-pressed="{{isWork}}" onClick="{{setWork}}" style="{{workStyle}}">While I work</button>
+  </div>
+
+  <section aria-label="Your pay" style="display: flex; gap: 16px; align-items: flex-end; background: #F6FAF6; border-radius: 20px; padding: 14px 16px">
+    <div class="jar" style="width: 128px; height: 168px; flex: none">
+      <span class="coin" style="position: absolute; left: 55px; width: 16px; height: 16px; top: {{you.top}}px; opacity: {{you.op}}"></span>
+      <div class="pile">
+        <sc-for list="{{you.coins}}" as="c" hint-placeholder-count="40"><span class="coin" style="width: 12px; height: 12px"></span></sc-for>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1; padding-bottom: 2px">
+      <div style="font-size: 13px; font-weight: 700; color: #1F7A4D; text-transform: uppercase; letter-spacing: .08em">To you</div>
+      <div style="font-size: 30px; font-weight: 800; line-height: 1.02; letter-spacing: -0.03em">1¢ every<br>{{you.every}}</div>
+      <div class="bar"><div style="height: 100%; width: {{you.pct}}%; background: #1F7A4D"></div></div>
+      <div class="mono" style="font-size: 12px; color: #4E6B5C">{{you.pennies}}¢ so far · {{you.perHour}}</div>
+    </div>
+  </section>
+
+  <section aria-label="Taxes" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+    <sc-for list="{{taxes}}" as="s" hint-placeholder-count="4">
+      <div style="display: flex; flex-direction: column; gap: 5px; min-width: 0">
+        <div class="jar" style="height: 92px">
+          <span class="coin" style="position: absolute; left: calc(50% - 6px); width: 12px; height: 12px; top: {{s.top}}px; opacity: {{s.op}}"></span>
+          <div class="pile">
+            <sc-for list="{{s.coins}}" as="c" hint-placeholder-count="4"><span class="coin" style="width: 9px; height: 9px"></span></sc-for>
+          </div>
+        </div>
+        <div style="font-size: 12px; font-weight: 700; line-height: 1.15; min-height: 28px; color: {{s.color}}">{{s.label}}</div>
+        <div style="font-size: 13px; font-weight: 700; line-height: 1.1">1¢ / {{s.every}}</div>
+        <div class="bar"><div style="height: 100%; width: {{s.pct}}%; background: {{s.color}}"></div></div>
+        <div class="mono" style="font-size: 11px; color: #4E6B5C">next in {{s.next}}</div>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="margin-top: auto; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #C5D6CA; padding-top: 12px">
+    <div style="display: flex; justify-content: space-between; font-size: 13px; gap: 8px">
+      <span style="color: #4E6B5C">Since you got here</span>
+      <span class="mono"><strong style="color: #1F7A4D; font-weight: 500">{{youSince}}</strong> you · {{taxSince}} taxes</span>
+    </div>
+    <div style="display: flex; gap: 8px">
+      <div style="flex: 1; background: #F6FAF6; border-radius: 12px; padding: 8px 10px; font-size: 13px; line-height: 1.25">A coffee every <strong>{{coffee}}</strong></div>
+      <div style="flex: 1; background: #F6FAF6; border-radius: 12px; padding: 8px 10px; font-size: 13px; line-height: 1.25">Rent every <strong>{{rent}}</strong></div>
+    </div>
+    <p style="margin: 0; font-size: 11px; color: #4E6B5C">Illustrative 2026 figures · single filer · state 5% typed in</p>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  data() {
+    return {
+      base: 75000,
+      annual: { you: 57842.5, fed: 7670, ss: 4650, state: 3750, med: 1087.5 },
+      seconds: { year: 31536000, work: 7488000 },
+      streams: [
+        { key: 'fed', label: 'Federal', color: '#2F5DA8' },
+        { key: 'ss', label: 'Social Security', color: '#B4521C' },
+        { key: 'state', label: 'State', color: '#6F47A8' },
+        { key: 'med', label: 'Medicare', color: '#A8325F' }
+      ]
+    };
+  }
+  every(s) {
+    if (!isFinite(s)) return '—';
+    if (s < 10) return s.toFixed(1) + ' s';
+    if (s < 90) return Math.round(s) + ' s';
+    if (s < 3600) return Math.floor(s / 60) + ' min ' + Math.round(s % 60) + ' s';
+    return (s / 3600).toFixed(1) + ' h';
+  }
+  clock(s) {
+    if (!isFinite(s)) return '—';
+    if (s < 60) return s.toFixed(1) + ' s';
+    var m = Math.floor(s / 60), r = Math.floor(s % 60);
+    return m + ':' + (r < 10 ? '0' : '') + r;
+  }
+  span(s) {
+    if (!isFinite(s)) return '—';
+    if (s < 5400) return Math.round(s / 60) + ' min';
+    if (s < 172800) return (s / 3600).toFixed(1) + ' hours';
+    return Math.round(s / 86400) + ' days';
+  }
+  componentDidMount() {
+    var self = this;
+    this.setState({ start: Date.now() - 240000, now: Date.now() });
+    var tick = function () { self.setState({ now: Date.now() }); self.raf = requestAnimationFrame(tick); };
+    this.raf = requestAnimationFrame(tick);
+  }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); }
+  renderVals() {
+    var self = this, d = this.data(), st = this.state || {};
+    var mode = st.mode || 'year';
+    var salary = st.salary == null ? d.base : st.salary;
+    var now = st.now || Date.now();
+    var elapsed = (now - (st.start || now - 240000)) / 1000;
+    var scale = salary / d.base;
+    var stream = function (key, jarDrop, cap) {
+      var rate = d.annual[key] * scale / d.seconds[mode];
+      var cents = rate * elapsed * 100;
+      var whole = Math.floor(cents), p = cents - whole;
+      var fall = p < 0.82 ? 0 : Math.pow((p - 0.82) / 0.18, 2);
+      var period = rate > 0 ? 0.01 / rate : Infinity;
+      return {
+        rate: rate,
+        every: self.every(period),
+        next: self.clock((1 - p) * period),
+        pct: (p * 100).toFixed(1),
+        top: (10 + fall * jarDrop).toFixed(1),
+        op: (0.2 + 0.8 * Math.min(p / 0.82, 1)).toFixed(2),
+        pennies: whole,
+        coins: new Array(Math.min(whole, cap)).fill(0)
+      };
+    };
+    var you = stream('you', 120, 81);
+    you.perHour = '$' + (you.rate * 3600).toFixed(2) + ' an hour';
+    var taxRate = 0;
+    var taxes = d.streams.map(function (s) {
+      var t = stream(s.key, 52, 20);
+      taxRate += t.rate;
+      t.label = s.label; t.color = s.color;
+      return t;
+    });
+    var on = 'background:#0F2A1E;color:#E6EFE8', off = 'background:transparent;color:#0F2A1E';
+    return {
+      salaryText: salary ? salary.toLocaleString('en-US') : '',
+      onSalary: function (e) {
+        var v = parseInt(String(e.target.value).replace(/[^0-9]/g, ''), 10);
+        self.setState({ salary: isNaN(v) ? 0 : Math.min(v, 99999999) });
+      },
+      isYear: mode === 'year', isWork: mode === 'work',
+      yearStyle: mode === 'year' ? on : off, workStyle: mode === 'work' ? on : off,
+      setYear: function () { self.setState({ mode: 'year' }); },
+      setWork: function () { self.setState({ mode: 'work' }); },
+      you: you, taxes: taxes,
+      youSince: '$' + (you.rate * elapsed).toFixed(4),
+      taxSince: '$' + (taxRate * elapsed).toFixed(4),
+      coffee: you.rate > 0 ? this.span(5.5 / you.rate) : '—',
+      rent: you.rate > 0 ? this.span(1800 / you.rate) : '—'
+    };
+  }
+}
+</script>
+</body>
+</html>
