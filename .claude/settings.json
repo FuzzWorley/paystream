@@ -1,0 +1,62 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.config/gh/**)",
+      "Read(~/Library/Keychains/**)"
+    ],
+    "ask": [
+      "Bash(rm:*)",
+      "Bash(rm *)",
+      "Bash(rmdir *)",
+      "Bash(dd *)",
+      "Bash(shred *)",
+      "Bash(truncate *)",
+      "Bash(sudo *)",
+      "Bash(git push *)",
+      "Bash(git reset *)",
+      "Bash(git clean *)",
+      "Bash(git restore *)",
+      "Bash(git checkout -- *)",
+      "Bash(git checkout .)",
+      "Bash(git branch -D *)",
+      "Bash(git rebase *)",
+      "Bash(git stash drop *)",
+      "Bash(git stash clear *)",
+      "Bash(git worktree remove *)",
+      "Bash(git filter-branch *)",
+      "Bash(sftp *)",
+      "Bash(scp *)",
+      "Bash(gh pr merge *)",
+      "Bash(gh release *)",
+      "Bash(gh repo *)",
+      "Bash(npm publish *)",
+      "Bash(npm run deploy*)",
+      "Bash(npx wrangler deploy*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/bash-gate.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/path-gate.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
