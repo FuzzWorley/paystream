@@ -3,7 +3,6 @@ import { formatPercent } from '../lib/format';
 import { table } from '../lib/model';
 import { settings } from '../lib/settings';
 import { activeSkin } from '../skins';
-import { ClockToggle } from '../ui/ClockToggle';
 import { NumbersLink } from '../ui/NumbersLink';
 import { SalaryField } from '../ui/SalaryField';
 import { SinceYouGotHere } from '../ui/SinceYouGotHere';
@@ -34,10 +33,7 @@ export function Stream() {
 
       <main class="screen-main">
         <h1 class="visually-hidden">Your pay, by the second</h1>
-        <div class="salary-block">
-          <SalaryField />
-          <ClockToggle />
-        </div>
+        <SalaryField />
         <Hero />
         <StreamNotes />
         <StreamTable />
@@ -48,8 +44,16 @@ export function Stream() {
         <YourThings />
         <p class="footnote">
           <a href="/numbers#sources">{String(table.value.taxYear)} tax tables</a> ·{' '}
-          {FILING_STATUS_LABELS[s.filingStatus].toLowerCase()} · {stateNote(s.stateRate)} · estimates, not tax
-          advice · <a href="/privacy">privacy</a>
+          {FILING_STATUS_LABELS[s.filingStatus].toLowerCase()} · {stateNote(s.stateRate)} ·{' '}
+          {s.clock.kind === 'work' && (
+            <>
+              <a href="/numbers#clock">
+                {String(s.clock.hoursPerWeek)} h a week × {String(s.clock.weeksPerYear)} weeks
+              </a>{' '}
+              ·{' '}
+            </>
+          )}
+          estimates, not tax advice · <a href="/privacy">privacy</a>
         </p>
       </footer>
     </div>

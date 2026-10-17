@@ -157,8 +157,8 @@ checked as a set with the dataviz palette validator against that skin's backgrou
 are the wireframe hues brought to OKLCH lightness 0.66, the validator's dark band. Lane labels
 use text colours; the coloured marks beside them carry identity.
 
-The skin switch is in the header on the Stream screen, with the clock toggle under the salary
-(D22), and on the Numbers screen. A returning
+The skin switch is in the header on the Stream screen (D22) and on the Numbers screen. The
+clock, unit, taxes and time controls share one panel between the headline and the river (D26). A returning
 visitor gets their last skin; a first visit gets River.
 
 ## 5. Privacy, by construction

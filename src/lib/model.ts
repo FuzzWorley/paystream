@@ -4,8 +4,6 @@ import { computed } from '@preact/signals';
 import {
   cadence,
   COINS,
-  stepLadder,
-  TIME_UNITS,
   timeToEarn,
   unitSeconds,
   type Cadence,
@@ -18,7 +16,7 @@ import { annualBreakdown } from '../core/tax';
 import { STREAMS, type Clock, type PerStream, type Stream } from '../core/types';
 import { now } from './clock';
 import { formatAmount, formatCoin, formatDate, formatDuration } from './format';
-import { settings, taxInputs, updateSettings } from './settings';
+import { settings, taxInputs } from './settings';
 
 export const STREAM_LABELS: Record<Stream, string> = {
   you: 'You',
@@ -91,7 +89,7 @@ const earningYear = computed(() => earningSeconds(clock.value, calendarYear(now.
 const secondsIn = (unit: TimeUnit) => unitSeconds(unit, clock.value, earningYear.value);
 
 /** One coin for every stream (D16): the chosen one, or take-home's readable coin on auto. */
-const coin = computed<Coin>(() => {
+export const coin = computed<Coin>(() => {
   const choice = settings.value.coin;
   return choice !== 'auto' ? choice : (cadence(rates.value.you)?.coin ?? COINS[0]);
 });
@@ -243,40 +241,3 @@ export function takeHomeTime(amount: number): string | null {
 export const calculatedShares = computed(() =>
   sharesOf(annualBreakdown({ ...inputs.value, overrides: {} }, table.value), inputs.value.salary),
 );
-
-// The two steppers (D17): each always means one thing. Unit is the coin money arrives in;
-// time is the frame amounts are shown over. They are independent.
-
-export interface StepperView {
-  /** "10¢"; "hour". */
-  value: string;
-  canDown: boolean;
-  canUp: boolean;
-}
-
-export const steppers = computed<{ unit: StepperView; time: StepperView }>(() => {
-  const unit = settings.value.timeUnit;
-  return {
-    unit: {
-      value: formatCoin(coin.value),
-      canDown: stepLadder(COINS, coin.value, -1) !== null,
-      canUp: stepLadder(COINS, coin.value, 1) !== null,
-    },
-    // The bare frame ("hour"): the headline already says "every working hour" on the work clock.
-    time: {
-      value: unit,
-      canDown: stepLadder(TIME_UNITS, unit, -1) !== null,
-      canUp: stepLadder(TIME_UNITS, unit, 1) !== null,
-    },
-  };
-});
-
-export function stepUnit(direction: 1 | -1): void {
-  const next = stepLadder(COINS, coin.value, direction);
-  if (next !== null) updateSettings({ coin: next });
-}
-
-export function stepTime(direction: 1 | -1): void {
-  const next = stepLadder(TIME_UNITS, settings.value.timeUnit, direction);
-  if (next !== null) updateSettings({ timeUnit: next });
-}

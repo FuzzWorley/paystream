@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cadence, COINS, stepLadder, TIME_UNITS, timeToEarn, unitSeconds } from './cadence';
+import { cadence, TIME_UNITS, timeToEarn, unitSeconds } from './cadence';
 
 const AROUND = { kind: 'around' } as const;
 const WORK = { kind: 'work', hoursPerWeek: 40, weeksPerYear: 52 } as const;
@@ -54,17 +54,6 @@ describe('cadence', () => {
   it('counts in a chosen coin, however fast or slow', () => {
     expect(cadence(0.016, 0.01)).toEqual({ coin: 0.01, every: expect.closeTo(0.625, 9) as number });
     expect(cadence(0.001, 1)).toEqual({ coin: 1, every: expect.closeTo(1000, 9) as number });
-  });
-});
-
-describe('stepLadder', () => {
-  it('steps to the neighbouring rung, and stops at either end', () => {
-    expect(stepLadder(COINS, 0.1, 1)).toBe(1);
-    expect(stepLadder(COINS, 0.1, -1)).toBe(0.01);
-    expect(stepLadder(COINS, 100, 1)).toBeNull();
-    expect(stepLadder(COINS, 0.01, -1)).toBeNull();
-    expect(stepLadder(TIME_UNITS, 'hour', 1)).toBe('day');
-    expect(stepLadder(TIME_UNITS, 'second', -1)).toBeNull();
   });
 });
 

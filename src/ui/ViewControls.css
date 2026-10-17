@@ -1,0 +1,106 @@
+/*
+ * The view row (D26): four controls drawn alike and sized to their content, so they share one
+ * line on a 390px phone and none outshouts the headline. Tokens only.
+ */
+.controls {
+  /* 12px in River; a skin with a larger scale (Arcade's VT323) reads at its own size. */
+  --control-text: max(12px, calc(var(--text-xs) - 2px));
+  display: flex;
+  gap: var(--space-2) var(--space-1);
+}
+/* One row from 390px; a narrower phone (a 375px iPhone) gets a tidy two by two instead. */
+@media (max-width: 389px) {
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Each starts at its content's width and shares out any spare, so wider phones fill the row. */
+.control {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.control-label {
+  padding-left: var(--space-2);
+  font-size: calc(var(--control-text) - 2px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.control-well {
+  height: 40px;
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+.seg-option {
+  flex: 1;
+  min-width: 34px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text-muted);
+  font: 600 var(--control-text) var(--font-ui);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--duration-ui) var(--ease-out),
+    color var(--duration-ui) var(--ease-out);
+}
+/* The choice made: lit, but quietly. */
+.seg-option[aria-pressed='true'] {
+  background: var(--line);
+  color: var(--text);
+}
+
+/* 24px wide, the WCAG 2.5.8 minimum, so four controls share a row; the row's gaps add margin. */
+.step-button {
+  flex: none;
+  width: 24px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text);
+  font: 400 18px var(--font-ui);
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background var(--duration-ui) var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+.step-button:active:not(:disabled) {
+  transform: scale(0.9);
+  background: var(--line);
+}
+.step-button:disabled {
+  color: var(--text-faint);
+  opacity: 0.4;
+  cursor: default;
+}
+.step-value {
+  flex: 1;
+  align-self: center;
+  white-space: nowrap;
+  text-align: center;
+  font: 600 var(--control-text) var(--font-ui);
+  color: var(--text);
+}
+/* Each value gets the width of its widest rung, so stepping never shifts the row. */
+#control-unit + .control-well .step-value {
+  min-width: 2.2em;
+}
+#control-time + .control-well .step-value {
+  min-width: 3.5em;
+}

@@ -3,9 +3,8 @@ import { formatAmount, formatCoin, formatCountdown, formatDigits, formatPercent 
 import { lanes, views, type StreamView } from '../../lib/model';
 import { reducedMotion } from '../../lib/motion';
 import { EXAMPLE_SALARY, settings } from '../../lib/settings';
-import { RateSteppers } from '../../ui/RateSteppers';
 import { editingState } from '../../ui/StreamNotes';
-import { TaxesToggle } from '../../ui/TaxesToggle';
+import { ViewControls } from '../../ui/ViewControls';
 import './Hero.css';
 
 const DROPS = 5;
@@ -91,15 +90,13 @@ export function Hero() {
         <p class="rv-sub figures" aria-hidden="true">
           {countdown && coin ? `next ${coin} in ${countdown}` : ' '}
         </p>
-        <RateSteppers />
       </section>
+
+      <ViewControls />
 
       {drawn.length > 0 && (
         <section class="rv-lanes" aria-label="Where each penny goes">
-          <div class="rv-lanes-head">
-            <p class="rv-gross figures">${formatDigits(salary)} a year in ↓</p>
-            <TaxesToggle />
-          </div>
+          <p class="rv-gross figures">${formatDigits(salary)} a year in ↓</p>
           {drawn.map((v) => (
             <Lane key={v.stream} v={v} />
           ))}

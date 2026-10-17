@@ -3,7 +3,7 @@
   min-height: 100dvh;
   max-width: var(--page-max);
   margin: 0 auto;
-  padding: var(--space-4) var(--space-5) var(--space-4);
+  padding: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
@@ -77,41 +77,11 @@
   background: var(--text);
   color: var(--bg);
 }
-/* A secondary view switch, sitting inside the content rather than the header. */
-.toggle-small .toggle-option {
-  min-height: 30px;
-  min-width: 0;
-  padding: 0 var(--space-3);
-  font-size: 12px;
-}
-.toggle-small .toggle-option[aria-pressed='true'] {
-  background: var(--line);
-  color: var(--text);
-}
 
 .screen-main {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
-}
-
-/* Salary, and right under it which seconds it is paid over. */
-.salary-block {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-.clock-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-.clock-means {
-  min-width: 0;
-  font-size: var(--text-s);
-  color: var(--text-muted);
-  text-decoration-color: var(--line);
-  text-underline-offset: 3px;
 }
 
 .salary {

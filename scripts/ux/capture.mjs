@@ -34,7 +34,7 @@ export const SCREENS = [
     path: '/',
     setup: async (page) => {
       await page.getByLabel('Salary').fill('170000');
-      await page.getByRole('button', { name: 'At work' }).click();
+      await page.getByRole('button', { name: 'Work', exact: true }).click();
     },
   },
   {
@@ -43,7 +43,7 @@ export const SCREENS = [
     path: '/',
     setup: async (page) => {
       await page.getByLabel('Salary').fill('170000');
-      await page.getByRole('button', { name: 'At work' }).click();
+      await page.getByRole('button', { name: 'Work', exact: true }).click();
       await page.getByRole('button', { name: 'Bigger unit' }).click();
     },
   },
@@ -62,7 +62,7 @@ export const SCREENS = [
       const field = page.getByLabel('Your state income tax rate, in percent');
       await field.fill('5');
       await field.press('Enter');
-      await page.getByRole('button', { name: 'Combined' }).click();
+      await page.getByRole('button', { name: 'All', exact: true }).click();
     },
   },
   { name: 'Numbers', path: '/numbers' },

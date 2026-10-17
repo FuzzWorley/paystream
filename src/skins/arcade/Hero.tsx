@@ -2,9 +2,8 @@ import { formatCoin, formatCountdown, formatPercent } from '../../lib/format';
 import { lanes, views, type LaneId, type StreamView } from '../../lib/model';
 import { reducedMotion } from '../../lib/motion';
 import { settings } from '../../lib/settings';
-import { RateSteppers } from '../../ui/RateSteppers';
 import { editingState } from '../../ui/StreamNotes';
-import { TaxesToggle } from '../../ui/TaxesToggle';
+import { ViewControls } from '../../ui/ViewControls';
 import './Hero.css';
 
 const BLOCKS = 12;
@@ -102,15 +101,13 @@ export function Hero() {
         <p class="ar-sub" aria-hidden="true">
           {countdown && coin ? `NEXT ${coin} IN ${countdown.toUpperCase()}` : ' '}
         </p>
-        <RateSteppers />
       </section>
+
+      <ViewControls />
 
       {rows.length > 0 && (
         <section class="ar-scores" aria-label="High scores: where each penny goes">
-          <div class="ar-scores-head">
-            <h2 class="ar-title">HIGH SCORES</h2>
-            <TaxesToggle />
-          </div>
+          <h2 class="ar-title">HIGH SCORES</h2>
           <div class="ar-cols ar-heads" aria-hidden="true">
             <span>RANK</span>
             <span>NAME</span>

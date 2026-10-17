@@ -240,6 +240,8 @@ installed, the service worker precaches both skins.
 
 ## D22 — The skin switch is in the header; the clock moves under the salary (2026-10-17)
 
+*Clock placement superseded by D26; the header stands.*
+
 The owner wanted the skin switch prominent and at the top. A phone header can't hold the
 wordmark, the clock toggle, a skin switch and the Numbers button (about 365px against 350px
 available), so the header is wordmark · **River | Arcade** · Numbers. The **24 h | At work**
@@ -287,3 +289,32 @@ than blurred into a buzz.
   62 fps in both skins with the CPU slowed 4×, no frame over 33 ms (worst 19 ms). The entry
   script was 60.9 KB (21.6 KB gzip) and the stylesheet 16.9 KB (3.8 KB gzip). Measured in
   headless Chromium on the development Mac, 2026-10-17.
+
+## D26 — One panel for how the streams are shown (2026-10-17)
+
+On the phone, the owner found the controls badly laid out. Four switches in four styles were
+scattered between the outputs: skin in the header, the clock under the salary, big unit and
+time pills, and Split/Combined crammed beside the river's label. Three of them had loud
+white "on" states, so nothing ranked below the headline.
+
+Now the Stream screen reads input → result → how it's shown → detail:
+
+- **Header:** wordmark, the skin switch (prominent, D22), Your numbers.
+- **Salary**, then the **headline**: the loudest thing on the screen.
+- **One row of four view controls**: Clock (24 h | Work), Unit (− 1¢ +), Time (− hour +) and
+  Taxes (Split | All). They share a height and a look, carry small labels above, and light the
+  choice made quietly. Every control still means one thing (D17). The owner preferred
+  toggles and ± to dropdowns, which were tried and dropped.
+- **Fitting one row is measured, not assumed**: at 390px, River needs 352px and Arcade 356px
+  of the 358px available. That takes 12px control text (14px in Arcade's VT323), 24px-wide ±
+  buttons (the WCAG 2.5.8 minimum), the shorter labels "Work" and "All", and the standard
+  16px page gutter (down from 20px). Below 390px (a 375px iPhone) the four become a 2×2 grid
+  rather than overflowing.
+- **Wider phones fill the row**: each control starts at its content's width and shares out the
+  spare space, as the owner suggested, so a 430px phone has no gaps between them.
+- **The river** (or high-score table), straight after the row.
+- **The work week** ("40 h a week × 52 weeks") joins the footnote's other assumptions and links
+  to the clock settings. The headline already says "every working hour".
+
+One shared component (`ui/ViewControls`) replaces the clock toggle, the steppers and the
+Split/Combined switch, and each skin places it after its headline.

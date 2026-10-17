@@ -50,11 +50,6 @@ export function cadence(ratePerSecond: number, choice: CoinChoice = 'auto'): Cad
   return { coin, every: coin / ratePerSecond };
 }
 
-/** The next rung up or down a ladder (coins, time frames); null past either end. */
-export function stepLadder<T>(ladder: readonly T[], rung: T, direction: 1 | -1): T | null {
-  return ladder[ladder.indexOf(rung) + direction] ?? null;
-}
-
 /** Seconds to earn `amount` at `ratePerSecond` ("a month's rent every 9.4 days"). */
 export function timeToEarn(amount: number, ratePerSecond: number): number {
   return ratePerSecond > 0 ? amount / ratePerSecond : Infinity;

@@ -42,7 +42,7 @@
   text-shadow: 0 0 8px rgb(107 255 138 / 50%);
 }
 .ar-sub {
-  margin: 0 0 var(--space-2);
+  margin: 0;
   font-size: var(--text-s);
   color: var(--text-muted);
 }
@@ -51,12 +51,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-}
-.ar-scores-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-3);
 }
 .ar-title {
   margin: 0;
