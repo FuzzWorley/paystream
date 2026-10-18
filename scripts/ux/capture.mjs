@@ -99,6 +99,30 @@ export const SCREENS = [
   },
   // Chance alone, run to the end: the result says it kept the real split.
   { name: 'Paychinko-watched', path: '/games/paychinko?watch', watchedMs: 75_000 },
+  {
+    // Twenty seconds in, the jar slid to the right with the arrow key.
+    name: 'Catcher',
+    path: '/games/catcher',
+    watchedMs: 20_000,
+    setup: async (page) => {
+      await page.keyboard.down('ArrowRight');
+      await page.clock.runFor(250);
+      await page.keyboard.up('ArrowRight');
+    },
+  },
+  {
+    // A few coins in: the snake carries its first tax segments.
+    name: 'Snake',
+    path: '/games/snake',
+    watchedMs: 600,
+    setup: async (page) => {
+      // A zigzag that stays clear of the walls: about three cells per leg.
+      for (const key of ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowRight', 'ArrowUp']) {
+        await page.keyboard.press(key);
+        await page.clock.runFor(450);
+      }
+    },
+  },
 ];
 
 // Mirrors src/skins (D9: dark only in v1). A skin is chosen by tapping the switch on Your

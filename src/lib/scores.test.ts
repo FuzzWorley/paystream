@@ -3,22 +3,22 @@ import { parseScores } from './scores';
 
 describe('parseScores', () => {
   it('keeps valid bests', () => {
-    expect(parseScores({ paychinko: { beat: 0.14, kept: 0.91, at: 1 } })).toEqual({
-      paychinko: { beat: 0.14, kept: 0.91, at: 1 },
+    expect(parseScores({ paychinko: { value: 0.14, at: 1 }, snake: { value: 23, at: 2 } })).toEqual({
+      paychinko: { value: 0.14, at: 1 },
+      snake: { value: 23, at: 2 },
     });
   });
 
   it('drops anything malformed or out of range, game by game', () => {
     expect(
       parseScores({
-        a: { beat: '0.1', kept: 0.5, at: 1 },
-        b: { beat: 2, kept: 0.5, at: 1 },
-        c: { beat: 0.1, kept: 1.5, at: 1 },
+        a: { value: '0.1', at: 1 },
+        b: { value: 2e9, at: 1 },
+        c: { value: 1, at: Number.NaN },
         d: null,
-        e: { beat: 0.1, kept: 0.5, at: Number.NaN },
-        ok: { beat: -0.05, kept: 0.7, at: 2 },
+        ok: { value: -0.05, at: 2 },
       }),
-    ).toEqual({ ok: { beat: -0.05, kept: 0.7, at: 2 } });
+    ).toEqual({ ok: { value: -0.05, at: 2 } });
     expect(parseScores(null)).toEqual({});
     expect(parseScores('x')).toEqual({});
   });

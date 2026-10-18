@@ -10,12 +10,16 @@ const SHORT: Record<string, string> = {
   medicare: 'Medicare',
 };
 
-/** The arcade's game select (D13): one game for now, the others named so they're expected. */
+const points = (share: number) => `${share >= 0 ? '+' : ''}${(share * 100).toFixed(1)}`;
+
+/** The arcade's game select (D13). */
 export function Games() {
   const parts = split.value.filter((p) => p.rate > 0);
   const total = parts.reduce((sum, p) => sum + p.rate, 0);
   const mine = parts.find((p) => p.mine);
   const best = bests.value['paychinko'];
+  const catcher = bests.value['catcher'];
+  const snake = bests.value['snake'];
   return (
     <div class="screen">
       <header class="screen-header numbers-header">
@@ -50,21 +54,28 @@ export function Games() {
           )}
           <span class="game-meta">
             {mine && total > 0 ? `Your bin: ${formatPercent(mine.rate / total)}` : ''}
-            {best ? ` · Best: ${best.beat >= 0 ? '+' : ''}${(best.beat * 100).toFixed(1)} points` : ''}
+            {best ? ` · Best: ${points(best.value)} points` : ''}
           </span>
         </a>
         <a class="game-watch" href="/games/paychinko?watch">
           Watch chance play it: the bins fill in your real split
         </a>
 
-        <div class="game-card game-card-soon" aria-disabled="true">
+        <a class="game-card" href="/games/catcher">
           <span class="game-name">Coin catcher</span>
-          <span class="game-blurb">Catch your pennies before the taxman’s bucket does. Soon.</span>
-        </div>
-        <div class="game-card game-card-soon" aria-disabled="true">
+          <span class="game-blurb">
+            Your pay rains down in its real split. Slide your jar and snatch the taxman’s coins before they
+            land.
+          </span>
+          {catcher && <span class="game-meta">Best: {points(catcher.value)} points</span>}
+        </a>
+        <a class="game-card" href="/games/snake">
           <span class="game-name">Tax snake</span>
-          <span class="game-blurb">Eat your per-second coins; every tax is a segment you carry. Soon.</span>
-        </div>
+          <span class="game-blurb">
+            Eat coins worth a minute of your pay. Every coin’s taxes join you as a segment you carry.
+          </span>
+          {snake && <span class="game-meta">Best: {String(snake.value)} coins</span>}
+        </a>
       </main>
 
       <footer class="screen-footer">

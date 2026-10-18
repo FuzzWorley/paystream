@@ -8,10 +8,10 @@ import {
   binsFromRates,
   dropBall,
   layPegs,
-  rng,
   stepBalls,
   type Bin,
 } from './engine';
+import { rng } from '../random';
 import { advance, fairShare, keptShare, newRound, release, startHold, useNudge } from './round';
 
 // A split like $75k single with a 5% state rate (shares summing to 1); any split works.

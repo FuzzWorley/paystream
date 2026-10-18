@@ -1,18 +1,9 @@
 // Paychinko on a canvas: the frame loop, drawing and input. Rules live in round.ts; the
 // hosting screen hands in the split, the colours and callbacks, and owns the buttons and HUD.
-import { BALL_R, BELT_TOP, BOARD, PEG_R, ROUND_SECONDS, aimAt, rng, type Bin } from './engine';
+import type { Palette } from '../palette';
+import { rng } from '../random';
+import { BALL_R, BELT_TOP, BOARD, PEG_R, ROUND_SECONDS, aimAt, type Bin } from './engine';
 import { advance, fairShare, keptShare, newRound, release, startHold, useNudge, type Round } from './round';
-
-export interface Palette {
-  bg: string;
-  surface: string;
-  line: string;
-  text: string;
-  muted: string;
-  /** By bin id. */
-  bins: Record<string, string>;
-  font: string;
-}
 
 export interface Hud {
   secondsLeft: number;
@@ -75,6 +66,8 @@ export function mount(canvas: HTMLCanvasElement, setup: Setup): Controls {
     const width = canvas.clientWidth;
     canvas.width = Math.round(width * ratio);
     canvas.height = Math.round(width * (BOARD.height / BOARD.width) * ratio);
+    // Resizing clears a canvas; redraw now, even while paused.
+    draw();
   };
 
   const hud = (): Hud => ({
@@ -101,7 +94,7 @@ export function mount(canvas: HTMLCanvasElement, setup: Setup): Controls {
     let start = round.phase * BOARD.width;
     for (const bin of round.bins) {
       const w = bin.width * BOARD.width;
-      const color = palette.bins[bin.id] ?? palette.muted;
+      const color = palette.streams[bin.id] ?? palette.muted;
       for (const shift of [-BOARD.width, 0]) {
         const x = start + shift;
         if (x + w < 0 || x > BOARD.width) continue;
@@ -134,7 +127,7 @@ export function mount(canvas: HTMLCanvasElement, setup: Setup): Controls {
     if (!round.over && !setup.watch && round.time < ROUND_SECONDS) {
       const aim = BALL_R + aimAt(round.holding ?? 0) * (BOARD.width - 2 * BALL_R);
       ctx.globalAlpha = round.holding === null ? 0.35 : 1;
-      ctx.fillStyle = palette.bins['you'] ?? palette.text;
+      ctx.fillStyle = palette.streams['you'] ?? palette.text;
       ctx.beginPath();
       ctx.moveTo(aim - 6, 4);
       ctx.lineTo(aim + 6, 4);
@@ -143,7 +136,7 @@ export function mount(canvas: HTMLCanvasElement, setup: Setup): Controls {
       ctx.globalAlpha = 1;
     }
 
-    ctx.fillStyle = palette.bins['you'] ?? palette.text;
+    ctx.fillStyle = palette.streams['you'] ?? palette.text;
     for (const b of round.balls) {
       ctx.beginPath();
       ctx.arc(b.x, b.y, BALL_R, 0, Math.PI * 2);
@@ -175,7 +168,7 @@ export function mount(canvas: HTMLCanvasElement, setup: Setup): Controls {
     }
     advance(round, dt);
     for (const landing of round.fresh) {
-      const color = setup.palette.bins[landing.bin.id] ?? setup.palette.text;
+      const color = setup.palette.streams[landing.bin.id] ?? setup.palette.text;
       splashes.push({ x: landing.x, text: landing.bin.mine ? 'KEPT' : 'TAXED', color, age: 0 });
       setup.onLand(landing.bin.mine);
     }

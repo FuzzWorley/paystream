@@ -1,4 +1,5 @@
 // One round of Paychinko: aim, drop, nudge, score. Pure, like the engine.
+import { rng } from '../random';
 import {
   BELT_SPEED,
   NUDGES_PER_ROUND,
@@ -8,7 +9,6 @@ import {
   dropBall,
   layPegs,
   nudge,
-  rng,
   stepBalls,
   type Ball,
   type Bin,

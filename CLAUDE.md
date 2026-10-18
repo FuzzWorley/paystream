@@ -25,7 +25,8 @@ Phases 0–5 of `docs/ENGINEERING_SPEC.md` (v1) are built: scaffold and CI, the 
 privacy page (D23), the Arcade skin (D20) loaded on demand (D21) with the skin switch in the
 header (D22), coin sounds (D24), and install, no-leak and performance checks (D25). Direction:
 **River (default) and Arcade skins**, dark only in v1 (D9); Vite + Preact + TypeScript,
-static assets only (D10). Since v1: Paychinko, the first game, with honest odds (D28).
+static assets only (D10). Since v1: the arcade games, Paychinko (D28), Coin catcher and Tax
+snake (D29), each with seeded tests that its odds follow the real split.
 Currencies are on hold (D27).
 
 To see UI changes: `npm run dev -- --host` serves on the LAN for the owner's phone;

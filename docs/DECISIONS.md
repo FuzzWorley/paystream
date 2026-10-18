@@ -355,4 +355,29 @@ The first game (D13), chosen over v2 and accounts for this sprint by the owner.
   pauses when the tab is hidden, and the stream's coin sounds are muted while it's open; in
   their place, landings that reach you clink.
 - **Ways in:** "Play Paychinko" in every skin's Stream footer, and Arcade's blinking PRESS
-  START. Coin catcher and Tax snake are listed as "soon".
+  START. Coin catcher and Tax snake are listed as "soon". *Built since: D29.*
+
+## D29 — Coin catcher and Tax snake (2026-10-17)
+
+The owner asked for the other two games, under the same rule as Paychinko: the numbers are
+honest, and skill is how you do better.
+
+- **Coin catcher:** coins of gross pay (a minute each) rain down. Each coin belongs to a
+  recipient drawn in proportion to the real split, and an uncaught coin lands with its owner,
+  so left alone you keep exactly your take-home share. Whatever your jar catches is yours, so
+  the skill is snatching the taxman's coins. Those wobble as they fall and carry a ring, which
+  makes them readable by shape as well as colour. The rain quickens over the 60-second
+  round. Score: points above the real share, like Paychinko. A seeded sweep over 40 untouched
+  rounds checks that coins arrive in the split and that the kept share matches.
+- **Tax snake:** each coin you eat is a minute of gross pay. Its take-home is yours, and its
+  taxes join the snake as one segment of a tax drawn in proportion to the tax split, so a
+  heavier tax burden is literally a longer, harder snake. Every fifth coin brings a gold coin
+  for six seconds: tax-free, so it pays in full and adds no segment. The snake waits for your
+  first move, and a round ends on a crash or at 60 seconds. Score: coins eaten, which doesn't
+  depend on salary. A seeded sweep of 4,000 meals checks that segments arrive in the tax
+  split.
+- **Shared parts:** seeded randomness (`games/random.ts`), a frame loop that pauses when the
+  tab is hidden or the window loses focus (`games/loop.ts`), and the skin palette read from
+  tokens (`ui/gamePalette.ts`). A canvas redraws as soon as it's resized, because resizing
+  clears it; a paused game was showing a blank board. Each game loads as its own chunk. Best
+  scores now store one number per game (`{ value, at }`).

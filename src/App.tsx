@@ -7,6 +7,8 @@ import { Stream } from './screens/Stream';
 
 // A game loads when it's opened, so the stream's first paint never waits on it.
 const Paychinko = lazy(() => import('./screens/Paychinko').then((m) => m.Paychinko));
+const Catcher = lazy(() => import('./screens/Catcher').then((m) => m.Catcher));
+const Snake = lazy(() => import('./screens/Snake').then((m) => m.Snake));
 
 /** Real paths (the Worker serves index.html for any of them); an unknown path shows the stream. */
 export function App() {
@@ -20,6 +22,8 @@ export function App() {
         <Route path="/privacy" component={Privacy} />
         <Route path="/games" component={Games} />
         <Route path="/games/paychinko" component={Paychinko} />
+        <Route path="/games/catcher" component={Catcher} />
+        <Route path="/games/snake" component={Snake} />
         <Route default component={Stream} />
       </Router>
     </LocationProvider>

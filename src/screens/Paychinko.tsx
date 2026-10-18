@@ -1,43 +1,14 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 import { binsFromRates } from '../games/paychinko/engine';
-import { mount, type Controls, type Hud, type Palette } from '../games/paychinko/game';
+import { mount, type Controls, type Hud } from '../games/paychinko/game';
 import { formatPercent, formatUsd } from '../lib/format';
 import { split } from '../lib/model';
 import { reducedMotion } from '../lib/motion';
 import { recordRound } from '../lib/scores';
 import { playCoin, streamMuted } from '../lib/sound';
+import { GAME_NAMES, gamePalette } from '../ui/gamePalette';
 import './Games.css';
-
-const NAMES: Record<string, string> = {
-  you: 'YOU',
-  federal: 'FED',
-  socialSecurity: 'SOC SEC',
-  state: 'STATE',
-  medicare: 'MED',
-};
-const TOKENS: Record<string, string> = {
-  you: '--you',
-  federal: '--federal',
-  socialSecurity: '--social-security',
-  state: '--state',
-  medicare: '--medicare',
-};
-
-/** The skin's colours, read once from its tokens: the canvas can't use CSS variables. */
-function palette(): Palette {
-  const css = getComputedStyle(document.documentElement);
-  const token = (name: string) => css.getPropertyValue(name).trim();
-  return {
-    bg: token('--bg'),
-    surface: token('--surface'),
-    line: token('--line'),
-    text: token('--text'),
-    muted: token('--text-muted'),
-    bins: Object.fromEntries(Object.entries(TOKENS).map(([id, name]) => [id, token(name)])),
-    font: token('--font-ui') || 'sans-serif',
-  };
-}
 
 const points = (share: number) => `${share >= 0 ? '+' : ''}${(share * 100).toFixed(1)}`;
 
@@ -64,8 +35,8 @@ export function Paychinko() {
     controls.current = mount(el, {
       bins: binsFromRates(rates),
       ballValue: gross * 60,
-      palette: palette(),
-      names: NAMES,
+      palette: gamePalette(),
+      names: GAME_NAMES,
       watch,
       reducedMotion: reducedMotion.peek(),
       onHud: setHud,
@@ -84,9 +55,7 @@ export function Paychinko() {
   useEffect(() => {
     if (!hud?.over || watch || recorded.current || hud.keptShare === null) return;
     recorded.current = true;
-    setNewBest(
-      recordRound('paychinko', { beat: hud.keptShare - hud.fairShare, kept: hud.keptShare, at: Date.now() }),
-    );
+    setNewBest(recordRound('paychinko', hud.keptShare - hud.fairShare));
   }, [hud, watch]);
 
   const hold = () => {
