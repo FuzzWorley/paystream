@@ -81,6 +81,24 @@ export const SCREENS = [
     },
   },
   { name: 'Privacy', path: '/privacy' },
+  { name: 'Games', path: '/games' },
+  {
+    // Mid-round: a few coins dropped and falling.
+    name: 'Paychinko',
+    path: '/games/paychinko',
+    watchedMs: 900,
+    setup: async (page) => {
+      const drop = page.getByRole('button', { name: /Hold to aim|Release to drop/ });
+      for (const held of [300, 700, 1100]) {
+        await drop.dispatchEvent('pointerdown', { pointerId: 1 });
+        await page.clock.runFor(held);
+        await drop.dispatchEvent('pointerup', { pointerId: 1 });
+        await page.clock.runFor(450);
+      }
+    },
+  },
+  // Chance alone, run to the end: the result says it kept the real split.
+  { name: 'Paychinko-watched', path: '/games/paychinko?watch', watchedMs: 75_000 },
 ];
 
 // Mirrors src/skins (D9: dark only in v1). A skin is chosen by tapping the switch on Your
@@ -108,7 +126,9 @@ export async function openScreen(page, screen, skin = SKINS[0]) {
   await page.goto(`${BASE}${screen.path}`, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await screen.setup?.(page);
-  await page.clock.fastForward(WATCHED_MS);
+  // Games step their physics per frame, so they're run through every frame, not skipped ahead.
+  if (screen.watchedMs) await page.clock.runFor(screen.watchedMs);
+  else await page.clock.fastForward(WATCHED_MS);
   await page.clock.runFor(1000);
 }
 

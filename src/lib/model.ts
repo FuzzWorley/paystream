@@ -179,6 +179,11 @@ export const lanes = computed<StreamView[]>(() => {
 
 export const isExample = computed(() => settings.value.salary === null);
 
+/** The split right now, for a game's bins: each stream's rate per second, never negative (D28). */
+export const split = computed(() =>
+  views.value.map((v) => ({ id: v.stream, rate: Math.max(0, v.rate), mine: v.stream === 'you' })),
+);
+
 /** Yearly figures; recomputed when inputs change, not per frame. */
 export const annual = computed(() => annualBreakdown(inputs.value, table.value));
 

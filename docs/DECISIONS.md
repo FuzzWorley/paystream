@@ -318,3 +318,41 @@ Now the Stream screen reads input → result → how it's shown → detail:
 
 One shared component (`ui/ViewControls`) replaces the clock toggle, the steppers and the
 Split/Combined switch, and each skin places it after its headline.
+
+## D27 — Currencies on hold (2026-10-17)
+
+The owner paused v1.5 before it was built. What was checked, for when it resumes: Coinbase's
+public `v2/exchange-rates?currency=USD` answered with `access-control-allow-origin: *`. It had
+EUR, GBP, JPY, CAD, BTC and PAXG (a token backed by one troy ounce of gold), so one keyless
+request from the browser could cover every currency in the brief. Measured from the
+development Mac on 2026-10-17. It still needs checking from the deployed origin.
+
+## D28 — Paychinko: honest odds from a moving belt (2026-10-17)
+
+The first game (D13), chosen over v2 and accounts for this sprint by the owner.
+
+- **The promise:** a ball left to chance lands in proportion to the real split. A peg board
+  alone can't keep it: balls cluster under where they drop and between pegs, so a narrow bin
+  (Medicare's ~1.5%) would be hit more or less often depending on where it sat. So **the bins
+  ride a wrap-around belt** scrolling a lap every 7 s. An unaimed drop meets the belt at a
+  uniformly random point, so each bin is hit in exactly its width's share, whatever the
+  physics does. A seeded sweep of 4,000 physics drops (`engine.test.ts`) checks every bin to
+  within four standard errors. Watch mode shows it on screen: a finished watched round kept
+  81.4% against a real 82.1%.
+- **Skill beats it:** hold to aim (a marker sweeps the top), release to drop, time drops
+  against the belt, and three nudges a round push falling coins sideways.
+- **Score:** each coin is a minute of gross pay at today's rate. A 60-second round ends with
+  the share you kept against your real take-home ("+14.0 points"). The best margin is saved in
+  this browser only (`paystream:scores`), and only for played rounds, not watched ones.
+- **Bins** are each stream's rate right now, so a capped Social Security has no bin.
+- **Physics** is pure and seeded (`games/paychinko/engine.ts`). No peg sits within a ball's
+  width of a wall, and a ball leaving the top of a peg always rolls off. Without those two
+  rules, the 20,000-drop stress run found stuck balls. Now the median landing is 2.6 s and
+  the slowest 4.6 s.
+- **Boundaries:** `games/` may import only `core/` and itself (lint-enforced). The screen
+  hands in numbers, skin colours and callbacks, and owns the buttons and HUD. The game is a
+  lazy chunk (about 4 KB gzipped). Keyboard (hold Space, arrows) and touch both work. It
+  pauses when the tab is hidden, and the stream's coin sounds are muted while it's open; in
+  their place, landings that reach you clink.
+- **Ways in:** "Play Paychinko" in every skin's Stream footer, and Arcade's blinking PRESS
+  START. Coin catcher and Tax snake are listed as "soon".

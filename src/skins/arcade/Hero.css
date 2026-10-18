@@ -155,6 +155,24 @@
   background: var(--c);
 }
 
+/* The way to the games, as the cabinet says it. */
+.ar-start {
+  align-self: center;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ar-start {
+    animation: ar-blink 1s steps(1) infinite;
+  }
+}
+
 .ar-pop {
   margin: var(--space-2) 0 0;
   text-align: center;

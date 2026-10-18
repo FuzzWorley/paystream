@@ -6,10 +6,15 @@ import tseslint from 'typescript-eslint';
 // reaching into one skin, is how the second skin stops being a contained piece of work.
 const notFromCore = [
   { group: ['preact', 'preact/*', '@preact/*', 'preact-iso'], message: 'core/ is plain maths: no UI.' },
-  { regex: '(^|/)(lib|ui|screens|skins|styles)(/|$)', message: 'core/ imports only core/.' },
+  { regex: '(^|/)(lib|ui|screens|skins|styles|games)(/|$)', message: 'core/ imports only core/.' },
 ];
 const notIntoASkin = [
   { regex: 'skins/(?!index$)', message: 'Shared code reaches skins only through skins/index.' },
+];
+// A game is a canvas and its rules: the screen hosting it hands in numbers and colours.
+const notFromAGame = [
+  { group: ['preact', 'preact/*', '@preact/*', 'preact-iso'], message: 'games/ draw to a canvas: no UI.' },
+  { regex: '(^|/)(lib|ui|screens|skins|styles)(/|$)', message: 'games/ import only core/ and games/.' },
 ];
 
 export default tseslint.config(
@@ -25,6 +30,10 @@ export default tseslint.config(
   {
     files: ['src/core/**'],
     rules: { 'no-restricted-imports': ['error', { patterns: notFromCore }] },
+  },
+  {
+    files: ['src/games/**'],
+    rules: { 'no-restricted-imports': ['error', { patterns: notFromAGame }] },
   },
   {
     files: ['src/ui/**', 'src/screens/**', 'src/lib/**'],

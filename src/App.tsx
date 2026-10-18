@@ -1,8 +1,12 @@
 import { useEffect } from 'preact/hooks';
-import { LocationProvider, Route, Router } from 'preact-iso';
+import { lazy, LocationProvider, Route, Router } from 'preact-iso';
+import { Games } from './screens/Games';
 import { Numbers } from './screens/Numbers';
 import { Privacy } from './screens/Privacy';
 import { Stream } from './screens/Stream';
+
+// A game loads when it's opened, so the stream's first paint never waits on it.
+const Paychinko = lazy(() => import('./screens/Paychinko').then((m) => m.Paychinko));
 
 /** Real paths (the Worker serves index.html for any of them); an unknown path shows the stream. */
 export function App() {
@@ -14,6 +18,8 @@ export function App() {
         <Route path="/" component={Stream} />
         <Route path="/numbers" component={Numbers} />
         <Route path="/privacy" component={Privacy} />
+        <Route path="/games" component={Games} />
+        <Route path="/games/paychinko" component={Paychinko} />
         <Route default component={Stream} />
       </Router>
     </LocationProvider>

@@ -42,6 +42,10 @@ export function Stream() {
       <footer class="screen-footer">
         <SinceYouGotHere />
         <YourThings />
+        <a class="games-link" href="/games">
+          <span class="games-link-name">Play Paychinko</span>
+          <span class="games-link-blurb">your pay as a pachinko board ›</span>
+        </a>
         <p class="footnote">
           <a href="/numbers#sources">{String(table.value.taxYear)} tax tables</a> ·{' '}
           {FILING_STATUS_LABELS[s.filingStatus].toLowerCase()} · {stateNote(s.stateRate)} ·{' '}

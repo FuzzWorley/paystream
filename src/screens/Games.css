@@ -1,0 +1,175 @@
+/* Games and Paychinko: shared screens, themed through tokens like every other (D5). */
+.game-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+.game-card-live {
+  border-color: var(--you);
+}
+.game-card-soon {
+  opacity: 0.55;
+}
+.game-name {
+  font-family: var(--font-brand);
+  font-size: var(--text-l);
+  font-weight: var(--brand-weight);
+  text-transform: var(--brand-case);
+  color: var(--you);
+}
+.game-card-soon .game-name {
+  color: var(--text);
+}
+.game-blurb {
+  font-size: var(--text-s);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+.game-split {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+}
+.game-split-part {
+  min-width: 2px;
+}
+.game-meta {
+  font-size: var(--text-s);
+  color: var(--text);
+}
+.game-watch {
+  align-self: flex-start;
+  margin-top: calc(var(--space-2) * -1);
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-s);
+  color: var(--text-muted);
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+}
+
+/* Paychinko */
+.pc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.pc-hud {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+.pc-stat {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+}
+.pc-stat-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.pc-stat-value {
+  font-size: var(--text-l);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pc-stat-you {
+  color: var(--you);
+}
+
+.pc-board {
+  position: relative;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  touch-action: none;
+}
+.pc-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 300 / 420;
+}
+
+.pc-controls {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 64px;
+  gap: var(--space-2);
+}
+.pc-button {
+  min-height: 56px;
+  border: 0;
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  color: var(--text);
+  font: 600 var(--text-m) var(--font-ui);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.pc-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.pc-drop {
+  background: var(--you);
+  color: var(--bg);
+}
+.pc-drop[aria-pressed='true'] {
+  filter: brightness(1.15);
+}
+.pc-help {
+  margin: 0;
+  font-size: var(--text-s);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* The result, over the board when a round ends. */
+.pc-result {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: color-mix(in oklab, var(--bg) 88%, transparent);
+  text-align: center;
+}
+.pc-result-big {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: var(--text-l);
+  font-weight: var(--brand-weight);
+  text-transform: var(--brand-case);
+  color: var(--you);
+}
+.pc-result p {
+  margin: 0;
+  font-size: var(--text-m);
+}
+.pc-again {
+  min-height: var(--tap);
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  color: var(--bg);
+  font: 600 var(--text-m) var(--font-ui);
+  cursor: pointer;
+}

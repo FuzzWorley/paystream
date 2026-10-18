@@ -1,6 +1,6 @@
 // A coin sound each time a coin reaches you, in the active skin's voice. Off by default; the
 // audio context is created only once sound is switched on.
-import { computed, effect } from '@preact/signals';
+import { computed, effect, signal } from '@preact/signals';
 import { views } from './model';
 import { settings } from './settings';
 
@@ -25,7 +25,18 @@ function audio(): AudioContext | null {
 const youLanded = computed(() => views.value[0]?.landed ?? 0);
 const youCoin = computed(() => views.value[0]?.cadence?.coin ?? 0);
 
+let voiceOf: (() => Voice) | null = null;
+
+/** True while a game is on screen: its own landings make the sound, not the stream's. */
+export const streamMuted = signal(false);
+
+/** One coin, now, in the active skin's voice: for a game's landings. Silent when sound is off. */
+export function playCoin(): void {
+  if (voiceOf && settings.peek().sound && ctx?.state === 'running') voiceOf()(ctx, ctx.currentTime);
+}
+
 export function startCoinSounds(voice: () => Voice): void {
+  voiceOf = voice;
   // Browsers allow audio only after a tap. Switching sound on is one; after a reload, the first
   // tap anywhere on the page is.
   effect(() => {
@@ -45,7 +56,8 @@ export function startCoinSounds(voice: () => Voice): void {
     const coin = youCoin.value;
     // A new coin size or salary restarts the count; only a coin arriving makes a sound.
     const arrived = coin === last.coin && landed > last.landed && landed - last.landed <= coin * 3;
-    if (arrived && settings.peek().sound && ctx?.state === 'running' && !document.hidden) {
+    const audible = settings.peek().sound && !streamMuted.peek() && !document.hidden;
+    if (arrived && audible && ctx?.state === 'running') {
       if (ctx.currentTime - last.at >= MIN_GAP_S) {
         voice()(ctx, ctx.currentTime);
         last.at = ctx.currentTime;

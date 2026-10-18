@@ -122,6 +122,9 @@ export function Hero() {
           <p class="ar-pop" aria-hidden="true" style={{ opacity: pop.toFixed(2) }}>
             +{coin ?? ''} TO YOU
           </p>
+          <a class="ar-start" href="/games">
+            PRESS START
+          </a>
         </section>
       )}
     </>
